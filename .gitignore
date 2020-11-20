@@ -128,11 +128,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Mac
-.DS_Store
+# Data files
+data/
 
-# PyCharm
-.idea
-
-# Data folder
-/data
+# PyCharm files
+.idea/
