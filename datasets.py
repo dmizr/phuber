@@ -17,7 +17,6 @@ class NoisyMNIST(MNIST):
         noise_prob: float = 0.0,
         noise_seed: Optional[int] = None,
     ) -> None:
-
         super(NoisyMNIST, self).__init__(
             root=root,
             train=train,
