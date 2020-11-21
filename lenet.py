@@ -21,7 +21,7 @@ class LeNet5(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = self.maxpool(self.relu(self.conv1(x)))
         x = self.maxpool(self.relu(self.conv2(x)))
-        x = x.flatten(start_dim=1)
+        x = torch.flatten(x, start_dim=1)
         x = self.relu(self.fc1(x))
         x = self.relu(self.fc2(x))
         x = self.fc3(x)
