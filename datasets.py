@@ -35,7 +35,7 @@ class NoisyMNIST(MNIST):
         self.noise_seed = noise_seed
         self._add_label_noise()
 
-    def _add_label_noise(self):
+    def _add_label_noise(self) -> None:
         if self.noise_prob < 0 or self.noise_prob > 1:
             raise ValueError(f"Invalid noise probability: {self.noise_prob}")
 
@@ -81,7 +81,7 @@ class NoisyCIFAR10(CIFAR10):
         self.noise_seed = noise_seed
         self._add_label_noise()
 
-    def _add_label_noise(self):
+    def _add_label_noise(self) -> None:
         if self.noise_prob < 0 or self.noise_prob > 1:
             raise ValueError(f"Invalid noise probability: {self.noise_prob}")
 
@@ -127,7 +127,7 @@ class NoisyCIFAR100(CIFAR100):
         self.noise_seed = noise_seed
         self._add_label_noise()
 
-    def _add_label_noise(self):
+    def _add_label_noise(self) -> None:
         if self.noise_prob < 0 or self.noise_prob > 1:
             raise ValueError(f"Invalid noise probability: {self.noise_prob}")
 
