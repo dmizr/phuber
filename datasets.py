@@ -7,6 +7,12 @@ from torchvision.datasets import CIFAR100
 
 
 class NoisyMNIST(MNIST):
+    """Extends `torchvision.datasets.MNIST <https://pytorch.org/docs/stable/torchvision/datasets.html#mnist>`_
+    class by adding symmetric label noise with a specific probability
+    """
+
+    num_classes = 10
+
     def __init__(
         self,
         root: str,
@@ -25,7 +31,6 @@ class NoisyMNIST(MNIST):
             download=download,
         )
 
-        self.num_classes = 10
         self.noise_prob = noise_prob
         self.noise_seed = noise_seed
         self._add_label_noise()
@@ -47,6 +52,12 @@ class NoisyMNIST(MNIST):
 
 
 class NoisyCIFAR10(CIFAR10):
+    """Extends `torchvision.datasets.CIFAR10 <https://pytorch.org/docs/stable/torchvision/datasets.html#cifar>`_
+    class by adding symmetric label noise with a specific probability
+    """
+
+    num_classes = 10
+
     def __init__(
         self,
         root: str,
@@ -66,7 +77,6 @@ class NoisyCIFAR10(CIFAR10):
             download=download,
         )
 
-        self.num_classes = 10
         self.noise_prob = noise_prob
         self.noise_seed = noise_seed
         self._add_label_noise()
@@ -88,6 +98,12 @@ class NoisyCIFAR10(CIFAR10):
 
 
 class NoisyCIFAR100(CIFAR100):
+    """Extends `torchvision.datasets.CIFAR100 <https://pytorch.org/docs/stable/torchvision/datasets.html#cifar>`_
+    class by adding symmetric label noise with a specific probability
+    """
+
+    num_classes = 100
+
     def __init__(
         self,
         root: str,
@@ -107,7 +123,6 @@ class NoisyCIFAR100(CIFAR100):
             download=download,
         )
 
-        self.num_classes = 100
         self.noise_prob = noise_prob
         self.noise_seed = noise_seed
         self._add_label_noise()
