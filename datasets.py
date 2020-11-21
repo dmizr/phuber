@@ -23,7 +23,7 @@ class NoisyMNIST(MNIST):
         noise_prob: float = 0.0,
         noise_seed: Optional[int] = None,
     ) -> None:
-        super(NoisyMNIST, self).__init__(
+        super().__init__(
             root=root,
             train=train,
             transform=transform,
@@ -69,7 +69,7 @@ class NoisyCIFAR10(CIFAR10):
         noise_seed: Optional[int] = None,
     ) -> None:
 
-        super(NoisyCIFAR10, self).__init__(
+        super().__init__(
             root=root,
             train=train,
             transform=transform,
@@ -115,7 +115,7 @@ class NoisyCIFAR100(CIFAR100):
         noise_seed: Optional[int] = None,
     ) -> None:
 
-        super(NoisyCIFAR100, self).__init__(
+        super().__init__(
             root=root,
             train=train,
             transform=transform,
