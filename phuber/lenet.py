@@ -3,7 +3,7 @@ import torch.nn as nn
 
 
 class LeNet5(nn.Module):
-    """LeNet-5 model from `"Gradient-Based Learning Applied To Document Recognition"
+    """LeNet-5 net from `"Gradient-Based Learning Applied To Document Recognition"
     <http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf>`_
     """
 
