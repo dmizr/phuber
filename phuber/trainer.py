@@ -1,6 +1,10 @@
 import pytorch_lightning as pl
+import os
 import torch.nn as nn
 import torchvision.transforms as transforms
+
+from omegaconf import DictConfig, OmegaConf
+import hydra
 
 from torch.utils.data import DataLoader
 from pytorch_lightning.loggers import TensorBoardLogger
@@ -12,11 +16,19 @@ from phuber.datasets import NoisyMNIST
 from phuber.lenet import LeNet5
 from phuber.classifiers import MNISTClassifier
 
-if __name__ == "__main__":
+@hydra.main(config_path="../conf", config_name="config")
+def main(cfg: DictConfig):
+    print(OmegaConf.to_yaml(cfg))
+    print("Working directory : {}".format(os.getcwd()))
     # Directories
-    save_dir = "./experiments/checkpoints/"
-    logger_dir = "./experiments/tb_logs/"
-    data_dir = "./data/"
+    data_dir = hydra.utils.to_absolute_path("./data/")
+    print(data_dir)
+
+    save_dir = "./checkpoints/"
+    logger_dir = "./tb_logs/"
+
+
+
 
     # Data
     transform = transforms.Compose(
@@ -28,8 +40,8 @@ if __name__ == "__main__":
         train=True,
         download=True,
         transform=transform,
-        noise_prob=0,
-        noise_seed=0,
+        noise_prob=cfg.hparams.noise_prob,
+        noise_seed=cfg.hparams.noise_seed,
     )
 
     test_data = NoisyMNIST(
@@ -46,8 +58,12 @@ if __name__ == "__main__":
 
     # Models
     net = LeNet5()
-    loss_fn = nn.CrossEntropyLoss()
-    lr = 0.005
+    if cfg.hparams.loss.lower() == "cross_entropy":
+        loss_fn = nn.CrossEntropyLoss()
+    else:
+        raise ValueError("Invalid loss")
+
+    lr = cfg.hparams.lr
     model = MNISTClassifier(net, loss_fn, lr)
 
     # Logger
@@ -65,3 +81,7 @@ if __name__ == "__main__":
     )
     trainer.fit(model, train_loader, test_loader)
     trainer.test(model, test_loader)
+
+
+if __name__ == "__main__":
+    main()
