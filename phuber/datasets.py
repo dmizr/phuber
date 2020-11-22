@@ -8,7 +8,7 @@ from torchvision.datasets import CIFAR100
 
 class NoisyMNIST(MNIST):
     """Extends `torchvision.datasets.MNIST <https://pytorch.org/docs/stable/torchvision/datasets.html#mnist>`_
-    class by adding symmetric label noise with a specific probability
+    class by corrupting the labels with a fixed probability
     """
 
     num_classes = 10
@@ -20,7 +20,7 @@ class NoisyMNIST(MNIST):
         transform: Optional[Callable] = None,
         target_transform: Optional[Callable] = None,
         download: bool = False,
-        noise_prob: float = 0.0,
+        corrupt_prob: float = 0.0,
         noise_seed: Optional[int] = None,
     ) -> None:
         super().__init__(
@@ -31,21 +31,21 @@ class NoisyMNIST(MNIST):
             download=download,
         )
 
-        self.noise_prob = noise_prob
+        self.corrupt_prob = corrupt_prob
         self.noise_seed = noise_seed
         self._add_label_noise()
 
     def _add_label_noise(self) -> None:
-        if self.noise_prob < 0 or self.noise_prob > 1:
-            raise ValueError(f"Invalid noise probability: {self.noise_prob}")
+        if self.corrupt_prob < 0 or self.corrupt_prob > 1:
+            raise ValueError(f"Invalid noise probability: {self.corrupt_prob}")
 
-        if self.noise_prob > 0:
+        if self.corrupt_prob > 0:
             if self.noise_seed is not None:
                 np.random.seed(self.noise_seed)
 
             p = np.ones((len(self.targets), self.num_classes))
-            p = p * (self.noise_prob / (self.num_classes - 1))
-            p[np.arange(len(self.targets)), self.targets.numpy()] = 1 - self.noise_prob
+            p = p * (self.corrupt_prob / (self.num_classes - 1))
+            p[np.arange(len(self.targets)), self.targets.numpy()] = 1 - self.corrupt_prob
 
             for i in range(len(self.targets)):
                 self.targets[i] = np.random.choice(self.num_classes, p=p[i])
@@ -53,7 +53,7 @@ class NoisyMNIST(MNIST):
 
 class NoisyCIFAR10(CIFAR10):
     """Extends `torchvision.datasets.CIFAR10 <https://pytorch.org/docs/stable/torchvision/datasets.html#cifar>`_
-    class by adding symmetric label noise with a specific probability
+    class by corrupting the labels with a fixed probability
     """
 
     num_classes = 10
@@ -65,7 +65,7 @@ class NoisyCIFAR10(CIFAR10):
         transform: Optional[Callable] = None,
         target_transform: Optional[Callable] = None,
         download: bool = False,
-        noise_prob: float = 0.0,
+        corrupt_prob: float = 0.0,
         noise_seed: Optional[int] = None,
     ) -> None:
 
@@ -77,21 +77,21 @@ class NoisyCIFAR10(CIFAR10):
             download=download,
         )
 
-        self.noise_prob = noise_prob
+        self.corrupt_prob = corrupt_prob
         self.noise_seed = noise_seed
         self._add_label_noise()
 
     def _add_label_noise(self) -> None:
-        if self.noise_prob < 0 or self.noise_prob > 1:
-            raise ValueError(f"Invalid noise probability: {self.noise_prob}")
+        if self.corrupt_prob < 0 or self.corrupt_prob > 1:
+            raise ValueError(f"Invalid noise probability: {self.corrupt_prob}")
 
-        if self.noise_prob > 0:
+        if self.corrupt_prob > 0:
             if self.noise_seed is not None:
                 np.random.seed(self.noise_seed)
 
             p = np.ones((len(self.targets), self.num_classes))
-            p = p * (self.noise_prob / (self.num_classes - 1))
-            p[np.arange(len(self.targets)), self.targets.numpy()] = 1 - self.noise_prob
+            p = p * (self.corrupt_prob / (self.num_classes - 1))
+            p[np.arange(len(self.targets)), self.targets.numpy()] = 1 - self.corrupt_prob
 
             for i in range(len(self.targets)):
                 self.targets[i] = np.random.choice(self.num_classes, p=p[i])
@@ -99,7 +99,7 @@ class NoisyCIFAR10(CIFAR10):
 
 class NoisyCIFAR100(CIFAR100):
     """Extends `torchvision.datasets.CIFAR100 <https://pytorch.org/docs/stable/torchvision/datasets.html#cifar>`_
-    class by adding symmetric label noise with a specific probability
+    class by corrupting the labels with a fixed probability
     """
 
     num_classes = 100
@@ -111,7 +111,7 @@ class NoisyCIFAR100(CIFAR100):
         transform: Optional[Callable] = None,
         target_transform: Optional[Callable] = None,
         download: bool = False,
-        noise_prob: float = 0.0,
+        corrupt_prob: float = 0.0,
         noise_seed: Optional[int] = None,
     ) -> None:
 
@@ -123,21 +123,21 @@ class NoisyCIFAR100(CIFAR100):
             download=download,
         )
 
-        self.noise_prob = noise_prob
+        self.corrupt_prob = corrupt_prob
         self.noise_seed = noise_seed
         self._add_label_noise()
 
     def _add_label_noise(self) -> None:
-        if self.noise_prob < 0 or self.noise_prob > 1:
-            raise ValueError(f"Invalid noise probability: {self.noise_prob}")
+        if self.corrupt_prob < 0 or self.corrupt_prob > 1:
+            raise ValueError(f"Invalid noise probability: {self.corrupt_prob}")
 
-        if self.noise_prob > 0:
+        if self.corrupt_prob > 0:
             if self.noise_seed is not None:
                 np.random.seed(self.noise_seed)
 
             p = np.ones((len(self.targets), self.num_classes))
-            p = p * (self.noise_prob / (self.num_classes - 1))
-            p[np.arange(len(self.targets)), self.targets.numpy()] = 1 - self.noise_prob
+            p = p * (self.corrupt_prob / (self.num_classes - 1))
+            p[np.arange(len(self.targets)), self.targets.numpy()] = 1 - self.corrupt_prob
 
             for i in range(len(self.targets)):
                 self.targets[i] = np.random.choice(self.num_classes, p=p[i])
