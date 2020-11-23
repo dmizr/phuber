@@ -1,9 +1,10 @@
 #@package _group_
 type: resnet50
-lr: 0.001
 epochs: 100
 batch_size: 64
+
 optimizer:
-  type: sgd
+  _target_: torch.optim.SGD
+  lr: 0.001
   weight_decay: 5e-3
   momentum: 0.1

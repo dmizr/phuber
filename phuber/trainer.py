@@ -74,8 +74,7 @@ def main(cfg: DictConfig):
     else:
         raise ValueError("Invalid loss")
 
-    lr = cfg.model.lr
-    model = MNISTClassifier(net, loss_fn, lr)
+    model = MNISTClassifier(net, loss_fn, cfg)
 
     # Logger
     logger = TensorBoardLogger(save_dir=logger_dir, name="test_model")

@@ -3,13 +3,16 @@ import torch.nn as nn
 import torch.nn.functional as F
 import pytorch_lightning as pl
 
+from omegaconf import DictConfig
+import hydra
+
 
 class MNISTClassifier(pl.LightningModule):
-    def __init__(self, net: nn.Module, loss_fn: nn.Module, lr: float) -> None:
+    def __init__(self, net: nn.Module, loss_fn: nn.Module, cfg: DictConfig) -> None:
         super().__init__()
         self.net = net
         self.loss_fn = loss_fn
-        self.lr = lr
+        self.cfg = cfg
         self.train_acc = pl.metrics.Accuracy()
         self.val_acc = pl.metrics.Accuracy()
         self.test_acc = pl.metrics.Accuracy()
@@ -79,4 +82,4 @@ class MNISTClassifier(pl.LightningModule):
         return loss
 
     def configure_optimizers(self):
-        return torch.optim.Adam(self.net.parameters(), weight_decay=1e-3, lr=self.lr)
+        return hydra.utils.instantiate(self.cfg.model.optimizer, self.net.parameters())
