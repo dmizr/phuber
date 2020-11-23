@@ -1,7 +1,9 @@
 # @package _group_
-type: lenet
 epochs: 20
 batch_size: 32
+
+network:
+  _target_: phuber.network.LeNet
 
 optimizer:
   _target_: torch.optim.Adam

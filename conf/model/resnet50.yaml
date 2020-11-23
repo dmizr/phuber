@@ -1,7 +1,11 @@
 #@package _group_
-type: resnet50
 epochs: 100
 batch_size: 64
+
+network:
+  _target_: torchvision.models.resnet50
+  pretrained: false
+  num_classes: 10 # gets overridden to 100 when used with cifar-100
 
 optimizer:
   _target_: torch.optim.SGD

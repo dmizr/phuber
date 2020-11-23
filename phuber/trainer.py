@@ -1,29 +1,23 @@
-import pytorch_lightning as pl
 import os
-import torch.nn as nn
-import torchvision.transforms as transforms
 
-from omegaconf import DictConfig, OmegaConf
+import torch
+import torchvision.transforms as transforms
 import hydra
+
 
 from torch.utils.data import DataLoader
 from pytorch_lightning.loggers import TensorBoardLogger
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 from pytorch_lightning import Trainer
+from omegaconf import DictConfig, OmegaConf
+from hydra.utils import instantiate
 
 from phuber.datasets import NoisyMNIST
-from phuber.lenet import LeNet
 from phuber.classifiers import MNISTClassifier
 
 
-@hydra.main(config_path="../conf", config_name="config")
-def main_1(cfg: DictConfig):
-    print(OmegaConf.to_yaml(cfg))
-
-
-@hydra.main(config_path="../conf", config_name="config")
-def main(cfg: DictConfig):
+def train(cfg: DictConfig):
     print(OmegaConf.to_yaml(cfg))
     print("Working directory : {}".format(os.getcwd()))
     # Directories
@@ -63,18 +57,13 @@ def main(cfg: DictConfig):
         test_data, batch_size=cfg.model.batch_size, shuffle=False, num_workers=4
     )
 
-    # Models
-    if cfg.model.type == "lenet":
-        net = LeNet()
-    else:
-        raise ValueError("Unsupported network architecture")
+    # Model
+    # Use Hydra's instantiation to initialize directly from the config file
+    net: torch.nn.Module = instantiate(cfg.model.network)
+    loss_fn: torch.nn.Module = instantiate(cfg.loss)
+    optim: torch.optim.Optimizer = instantiate(cfg.model.optimizer, net.parameters())
 
-    if cfg.loss.type == "ce" or cfg.loss.type == "crossentropy":
-        loss_fn = nn.CrossEntropyLoss()
-    else:
-        raise ValueError("Invalid loss")
-
-    model = MNISTClassifier(net, loss_fn, cfg)
+    model = MNISTClassifier(net, loss_fn, optim)
 
     # Logger
     logger = TensorBoardLogger(save_dir=logger_dir, name="test_model")
@@ -87,7 +76,9 @@ def main(cfg: DictConfig):
 
     # Trainer
     trainer = Trainer(
-        logger=logger, callbacks=[checkpoint_callback, early_stop_callback]
+        logger=logger,
+        callbacks=[checkpoint_callback, early_stop_callback],
+        max_epochs=cfg.model.epochs,
     )
     trainer.fit(model, train_loader, test_loader)
     trainer.test(model, test_loader)

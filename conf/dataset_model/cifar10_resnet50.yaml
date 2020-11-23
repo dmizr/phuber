@@ -2,6 +2,7 @@
 # changes default model parameter if resnet is used with cifar100
 # more info: https://hydra.cc/docs/patterns/specializing_config
 model:
-  batch_size: 128
+  batch_size: 64
   network:
-    num_classes: 100
+    num_classes: 10
+

@@ -1,8 +1,6 @@
 import torch
 import torch.nn as nn
 
-import logging
-
 
 class LeNet(nn.Module):
     """LeNet-5 net from `"Gradient-Based Learning Applied To Document Recognition"

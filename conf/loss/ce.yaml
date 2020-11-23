@@ -1,2 +1,2 @@
 # @package _group_
-type: ce # cross-entropy loss
+_target_: torch.nn.CrossEntropyLoss
