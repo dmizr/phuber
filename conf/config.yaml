@@ -1,5 +1,5 @@
 hparams:
   lr: 0.001
   loss: cross_entropy
-  noise_prob: 0.4
+  corrupt_prob: 0.4
   noise_seed: 0
