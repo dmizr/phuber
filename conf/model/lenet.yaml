@@ -1,0 +1,8 @@
+# @package _group_
+type: lenet
+lr: 0.001
+epochs: 20
+batch_size: 32
+optimizer:
+  type: adam
+  weight_decay: 1e-3

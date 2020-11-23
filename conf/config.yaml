@@ -1,5 +1,8 @@
-hparams:
-  lr: 0.001
-  loss: cross_entropy
-  corrupt_prob: 0.4
-  noise_seed: 0
+defaults:
+  - dataset: mnist
+  - model: lenet
+  - dataset_model: ${defaults.0.dataset}_${defaults.1.model} # change when Hydra 1.1 releases
+    optional: true # more info: https://hydra.cc/docs/patterns/specializing_config
+  - loss: ce
+
+

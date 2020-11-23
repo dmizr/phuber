@@ -1,0 +1,6 @@
+# @package _group_
+name: cifar10
+path: data/
+transform: true
+corrupt_prob: 0.0
+noise_seed: 0
