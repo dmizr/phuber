@@ -1,5 +1,5 @@
 # @package _global_
-# changes default model parameter if resnet is used with cifar100
+# changes batch size and num_classes if resnet is used with cifar100
 # more info: https://hydra.cc/docs/patterns/specializing_config
 model:
   batch_size: 128
