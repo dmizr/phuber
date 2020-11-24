@@ -13,7 +13,7 @@ from pytorch_lightning import Trainer
 from omegaconf import DictConfig, OmegaConf
 from hydra.utils import instantiate
 
-from phuber.datasets import NoisyMNIST
+from phuber.dataset import NoisyMNIST
 from phuber.classifiers import MNISTClassifier
 
 
