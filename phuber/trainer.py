@@ -19,6 +19,22 @@ from phuber.classifiers import MNISTClassifier
 
 def train(cfg: DictConfig):
     print(OmegaConf.to_yaml(cfg))
+    # Model
+    # Use Hydra's instantiation to initialize directly from the config file
+    net: torch.nn.Module = instantiate(cfg.model.network)
+    loss_fn: torch.nn.Module = instantiate(cfg.loss)
+    optimizer: torch.optim.Optimizer = instantiate(
+        cfg.model.optimizer, net.parameters()
+    )
+    scheduler = instantiate(cfg.model.scheduler, optimizer)
+    print(f"Net: {type(net)}")
+    print(f"Loss: {type(loss_fn)}")
+    print(f"Optimizer: {type(optimizer)}")
+    print(f"Scheduler: {type(scheduler)}")
+
+
+def train_old(cfg: DictConfig):
+    print(OmegaConf.to_yaml(cfg))
     print("Working directory : {}".format(os.getcwd()))
     # Directories
     data_dir = hydra.utils.to_absolute_path(cfg.dataset.path)
@@ -82,7 +98,3 @@ def train(cfg: DictConfig):
     )
     trainer.fit(model, train_loader, test_loader)
     trainer.test(model, test_loader)
-
-
-if __name__ == "__main__":
-    main()

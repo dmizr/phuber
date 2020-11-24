@@ -41,7 +41,7 @@ class ExponentialDecayLR(torch.optim.lr_scheduler.LambdaLR):
 
 
 class ConstantLR(torch.optim.lr_scheduler.LambdaLR):
-    """ Keeps the learning rate constant (does nothing).
+    """Keeps the learning rate constant (does nothing).
 
     Can be used when no scheduler is needed, avoids modifying the training loop.
 

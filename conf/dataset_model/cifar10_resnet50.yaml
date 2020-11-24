@@ -1,7 +1,20 @@
 # @package _global_
-# changes batch size and num_classes if resnet is used with cifar10
+# changes hyper-parameters of model if resnet-50 used with cifar-10
 # more info: https://hydra.cc/docs/patterns/specializing_config
 model:
+  epochs: 400
   batch_size: 64
+
   network:
     num_classes: 10
+
+  optimizer:
+    _target_: torch.optim.SGD
+    lr: 0.1
+    weight_decay: 5e-3
+    momentum: 0.1
+
+  scheduler:
+    _target_: torch.optim.lr_scheduler.MultiStepLR
+    milestones: [160, 300, 360]
+    gamma: 0.1

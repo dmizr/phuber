@@ -1,4 +1,5 @@
 # @package _group_
+# Default hyper-parameters for LeNet (used with MNIST by default)
 epochs: 20
 batch_size: 32
 
@@ -9,3 +10,9 @@ optimizer:
   _target_: torch.optim.Adam
   lr: 0.001
   weight_decay: 1e-3
+
+scheduler:
+  _target_: phuber.scheduler.ExponentialDecayLR
+  decay_rate: 0.1
+  decay_steps: 10000
+  staircase: False
