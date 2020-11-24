@@ -21,12 +21,12 @@ def train(cfg: DictConfig):
     print(OmegaConf.to_yaml(cfg))
     # Model
     # Use Hydra's instantiation to initialize directly from the config file
-    net: torch.nn.Module = instantiate(cfg.model.network)
+    net: torch.nn.Module = instantiate(cfg.model)
     loss_fn: torch.nn.Module = instantiate(cfg.loss)
     optimizer: torch.optim.Optimizer = instantiate(
-        cfg.model.optimizer, net.parameters()
+        cfg.hparams.optimizer, net.parameters()
     )
-    scheduler = instantiate(cfg.model.scheduler, optimizer)
+    scheduler = instantiate(cfg.hparams.scheduler, optimizer)
     print(f"Net: {type(net)}")
     print(f"Loss: {type(loss_fn)}")
     print(f"Optimizer: {type(optimizer)}")
@@ -67,17 +67,17 @@ def train_old(cfg: DictConfig):
     )
 
     train_loader = DataLoader(
-        train_data, batch_size=cfg.model.batch_size, shuffle=True, num_workers=4
+        train_data, batch_size=cfg.hparams.batch_size, shuffle=True, num_workers=4
     )
     test_loader = DataLoader(
-        test_data, batch_size=cfg.model.batch_size, shuffle=False, num_workers=4
+        test_data, batch_size=cfg.hparams.batch_size, shuffle=False, num_workers=4
     )
 
     # Model
     # Use Hydra's instantiation to initialize directly from the config file
-    net: torch.nn.Module = instantiate(cfg.model.network)
+    net: torch.nn.Module = instantiate(cfg.model)
     loss_fn: torch.nn.Module = instantiate(cfg.loss)
-    optim: torch.optim.Optimizer = instantiate(cfg.model.optimizer, net.parameters())
+    optim: torch.optim.Optimizer = instantiate(cfg.hparams.optimizer, net.parameters())
 
     model = MNISTClassifier(net, loss_fn, optim)
 
@@ -94,7 +94,7 @@ def train_old(cfg: DictConfig):
     trainer = Trainer(
         logger=logger,
         callbacks=[checkpoint_callback, early_stop_callback],
-        max_epochs=cfg.model.epochs,
+        max_epochs=cfg.hparams.epochs,
     )
     trainer.fit(model, train_loader, test_loader)
     trainer.test(model, test_loader)

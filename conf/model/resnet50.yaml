@@ -1,19 +1,5 @@
 # @package _group_
-# Default hyper-parameters for a ResNet50
-# These values get overridden when used with cifar010 or cifar-100
-# For more info, check dataset_model folder
-epochs: 100
-batch_size: 8
-
-network:
-  _target_: torchvision.models.resnet50
-  pretrained: false
-  # num_classes gets set to 10 when used with cifar-10, to 100 when used with cifar-100
-
-optimizer: # optimizer changes for cifar-10 / cifar-100
-  _target_: torch.optim.Adam
-  lr: 0.001
-  weight_decay: 1e-3
-
-scheduler: # scheduler changes for cifar-10 / cifar-100
-  _target_: phuber.scheduler.ConstantLR
+_target_: torchvision.models.resnet50
+pretrained: false
+# num_classes gets set to 10 when used with cifar-10, to 100 when used with cifar-100
+# more info: https://hydra.cc/docs/patterns/specializing_config
