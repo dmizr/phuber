@@ -1,12 +1,12 @@
 import hydra
 from omegaconf import DictConfig, OmegaConf
 import phuber
-from phuber.trainer import train
+from phuber.train import train
 
 
 @hydra.main(config_path="conf", config_name="config")
 def run(cfg: DictConfig):
-    phuber.trainer.train(cfg)
+    phuber.train.train(cfg)
 
 
 if __name__ == "__main__":
