@@ -1,10 +1,9 @@
 from typing import Tuple, Callable
 
-import torch
 import torchvision.transforms as transforms
 
 
-def transform_mnist() -> Callable:
+def mnist_transform() -> Callable:
     """PIL Image to Tensor transform for MNIST, with standardization
 
     Returns:
@@ -22,7 +21,7 @@ def transform_mnist() -> Callable:
     return transform
 
 
-def transform_cifar(
+def cifar_transform(
     mean: Tuple[float, float, float],
     std: Tuple[float, float, float],
     augment: bool = True,
@@ -54,7 +53,7 @@ def transform_cifar(
     return transform
 
 
-def transform_cifar10(augment: bool = True) -> Callable:
+def cifar10_transform(augment: bool = True) -> Callable:
     """PIL Image to Tensor transform for CIFAR-10, with standardization and data augmentation
     Args:
         augment: if True, adds random horizontal flip and random cropping
@@ -65,10 +64,10 @@ def transform_cifar10(augment: bool = True) -> Callable:
     # Source: https://gist.github.com/weiaicunzai/e623931921efefd4c331622c344d8151
     mean = (0.4914, 0.4822, 0.4465)
     std = (0.2470, 0.2435, 0.2616)
-    return transform_cifar(mean, std, augment)
+    return cifar_transform(mean, std, augment)
 
 
-def transform_cifar100(augment: bool = True) -> Callable:
+def cifar100_transform(augment: bool = True) -> Callable:
     """PIL Image to Tensor transform for CIFAR-100, with standardization and data augmentation
     Args:
         augment: if True, adds random horizontal flip and random cropping
@@ -79,4 +78,4 @@ def transform_cifar100(augment: bool = True) -> Callable:
     # Source: https://gist.github.com/weiaicunzai/e623931921efefd4c331622c344d8151
     mean = (0.5071, 0.4867, 0.4408)
     std = (0.2675, 0.2565, 0.2761)
-    return transform_cifar(mean, std, augment)
+    return cifar_transform(mean, std, augment)
