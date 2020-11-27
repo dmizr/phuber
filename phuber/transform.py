@@ -1,4 +1,4 @@
-from typing import Tuple, Callable
+from typing import Callable, Tuple
 
 import torchvision.transforms as transforms
 
@@ -26,7 +26,8 @@ def cifar_transform(
     std: Tuple[float, float, float],
     augment: bool = True,
 ) -> Callable:
-    """PIL Image to Tensor transform for CIFAR, with standardization and data augmentation
+    """PIL Image to Tensor transform for CIFAR,
+    with standardization and data augmentation
     Args:
         augment: if True, adds random horizontal flip and random cropping
         mean: RGB channels mean
@@ -54,7 +55,9 @@ def cifar_transform(
 
 
 def cifar10_transform(augment: bool = True) -> Callable:
-    """PIL Image to Tensor transform for CIFAR-10, with standardization and data augmentation
+    """PIL Image to Tensor transform for CIFAR-10,
+    with standardization and data augmentation
+
     Args:
         augment: if True, adds random horizontal flip and random cropping
 
@@ -68,7 +71,9 @@ def cifar10_transform(augment: bool = True) -> Callable:
 
 
 def cifar100_transform(augment: bool = True) -> Callable:
-    """PIL Image to Tensor transform for CIFAR-100, with standardization and data augmentation
+    """PIL Image to Tensor transform for CIFAR-100,
+    with standardization and data augmentation
+
     Args:
         augment: if True, adds random horizontal flip and random cropping
 

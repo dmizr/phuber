@@ -1,12 +1,6 @@
-import os
-
 import torch
-import hydra
-
-from omegaconf import DictConfig, OmegaConf
 from hydra.utils import instantiate
-
-from phuber.dataset import NoisyMNIST
+from omegaconf import DictConfig, OmegaConf
 
 
 def train(cfg: DictConfig):
@@ -16,7 +10,7 @@ def train(cfg: DictConfig):
     model: torch.nn.Module = instantiate(cfg.model)
     loss_fn: torch.nn.Module = instantiate(cfg.loss)
     optimizer: torch.optim.Optimizer = instantiate(
-        cfg.hparams.optimizer, net.parameters()
+        cfg.hparams.optimizer, model.parameters()
     )
     scheduler = instantiate(cfg.hparams.scheduler, optimizer)
     print(f"Net: {type(model)}")

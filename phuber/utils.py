@@ -25,12 +25,12 @@ class AccuracyMetric:
     """ Keeps track of the top-k accuracy over an epoch
 
     Args:
-        k (int): Value of k for top-k accuracy (default: 1)
+        k (int): Value of k for top-k accuracy
     """
 
     def __init__(self, k: int = 1) -> None:
         self.correct = 0
-        self.count = 0
+        self.total = 0
         self.k = k
 
     def update(self, out: torch.Tensor, target: torch.Tensor) -> None:
@@ -41,11 +41,11 @@ class AccuracyMetric:
         total_samples = target.shape[0]
 
         self.correct += total_correct
-        self.count += total_samples
+        self.total += total_samples
 
     def compute(self) -> float:
-        return self.correct / self.count
+        return self.correct / self.total
 
     def reset(self) -> None:
         self.correct = 0
-        self.count = 0
+        self.total = 0

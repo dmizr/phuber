@@ -1,15 +1,14 @@
 import logging
 import os
 import time
-
 from typing import Optional
 
 import torch
 import tqdm
-
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
-from phuber.utils import LossMetric, AccuracyMetric
+
+from phuber.utils import AccuracyMetric, LossMetric
 
 
 class Trainer:

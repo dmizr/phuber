@@ -1,13 +1,12 @@
-from typing import Optional, Callable
-import numpy as np
+from typing import Callable, Optional
 
-from torchvision.datasets import MNIST
-from torchvision.datasets import CIFAR10
-from torchvision.datasets import CIFAR100
+import numpy as np
+from torchvision.datasets import CIFAR10, CIFAR100, MNIST
 
 
 class NoisyMNIST(MNIST):
-    """Extends `torchvision.datasets.MNIST <https://pytorch.org/docs/stable/torchvision/datasets.html#mnist>`_
+    """Extends `torchvision.datasets.MNIST
+    <https://pytorch.org/docs/stable/torchvision/datasets.html#mnist>`_
     class by corrupting the labels with a fixed probability
     """
 
@@ -54,7 +53,8 @@ class NoisyMNIST(MNIST):
 
 
 class NoisyCIFAR10(CIFAR10):
-    """Extends `torchvision.datasets.CIFAR10 <https://pytorch.org/docs/stable/torchvision/datasets.html#cifar>`_
+    """Extends `torchvision.datasets.CIFAR10
+    <https://pytorch.org/docs/stable/torchvision/datasets.html#cifar>`_
     class by corrupting the labels with a fixed probability
     """
 
@@ -102,7 +102,8 @@ class NoisyCIFAR10(CIFAR10):
 
 
 class NoisyCIFAR100(CIFAR100):
-    """Extends `torchvision.datasets.CIFAR100 <https://pytorch.org/docs/stable/torchvision/datasets.html#cifar>`_
+    """Extends `torchvision.datasets.CIFAR100
+    <https://pytorch.org/docs/stable/torchvision/datasets.html#cifar>`_
     class by corrupting the labels with a fixed probability
     """
 

@@ -3,7 +3,8 @@ import torch
 
 class ExponentialDecayLR(torch.optim.lr_scheduler.LambdaLR):
     """Implements ExponentialDecay scheduler from Keras.
-    To match Keras behaviour, call scheduler at each optimizer step (usually at each iteration).
+    To match Keras behaviour, call scheduler at each optimizer step
+    (usually at each iteration).
     When last_epoch=-1, sets initial lr as lr.
 
     Sets the learning rate to:
