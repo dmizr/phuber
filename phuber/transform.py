@@ -24,7 +24,7 @@ def mnist_transform() -> Callable:
 def cifar_transform(
     mean: Tuple[float, float, float],
     std: Tuple[float, float, float],
-    augment: bool = True,
+    augment: bool = False,
 ) -> Callable:
     """PIL Image to Tensor transform for CIFAR,
     with standardization and data augmentation
@@ -54,7 +54,7 @@ def cifar_transform(
     return transform
 
 
-def cifar10_transform(augment: bool = True) -> Callable:
+def cifar10_transform(augment: bool = False) -> Callable:
     """PIL Image to Tensor transform for CIFAR-10,
     with standardization and data augmentation
 
@@ -70,7 +70,7 @@ def cifar10_transform(augment: bool = True) -> Callable:
     return cifar_transform(mean, std, augment)
 
 
-def cifar100_transform(augment: bool = True) -> Callable:
+def cifar100_transform(augment: bool = False) -> Callable:
     """PIL Image to Tensor transform for CIFAR-100,
     with standardization and data augmentation
 

@@ -1,6 +1,13 @@
 # @package _group_
 name: cifar100
-path: data/
-transform: true
-corrupt_prob: 0.0
-noise_seed: 0
+root: data/
+download: true # download if not already downloaded
+num_workers: 4
+
+train:
+  augment: true
+  corrupt_prob: 0.0
+  noise_seed: 0
+
+test:
+  use: true

@@ -1,4 +1,18 @@
+import re
+
 import torch
+
+
+def to_clean_str(s: str) -> str:
+    """Keeps only alphanumeric characters and lowers them
+
+    Args:
+        s: a string
+
+    Returns:
+        cleaned string
+    """
+    return re.sub("[^a-zA-Z0-9]", "", s).lower()
 
 
 class LossMetric:
