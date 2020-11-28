@@ -15,4 +15,4 @@ hparams:
     _target_: phuber.scheduler.ExponentialDecayLR
     decay_rate: 0.1
     decay_steps: 10000
-    staircase: False
+    staircase: false

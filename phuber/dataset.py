@@ -46,7 +46,7 @@ class NoisyMNIST(MNIST):
 
         p = np.ones((len(self.targets), self.num_classes))
         p = p * (self.corrupt_prob / (self.num_classes - 1))
-        p[np.arange(len(self.targets)), self.targets.numpy()] = 1 - self.corrupt_prob
+        p[np.arange(len(self.targets)), self.targets] = 1 - self.corrupt_prob
 
         for i in range(len(self.targets)):
             self.targets[i] = np.random.choice(self.num_classes, p=p[i])
@@ -95,7 +95,7 @@ class NoisyCIFAR10(CIFAR10):
 
         p = np.ones((len(self.targets), self.num_classes))
         p = p * (self.corrupt_prob / (self.num_classes - 1))
-        p[np.arange(len(self.targets)), self.targets.numpy()] = 1 - self.corrupt_prob
+        p[np.arange(len(self.targets)), self.targets] = 1 - self.corrupt_prob
 
         for i in range(len(self.targets)):
             self.targets[i] = np.random.choice(self.num_classes, p=p[i])
@@ -144,7 +144,7 @@ class NoisyCIFAR100(CIFAR100):
 
         p = np.ones((len(self.targets), self.num_classes))
         p = p * (self.corrupt_prob / (self.num_classes - 1))
-        p[np.arange(len(self.targets)), self.targets.numpy()] = 1 - self.corrupt_prob
+        p[np.arange(len(self.targets)), self.targets] = 1 - self.corrupt_prob
 
         for i in range(len(self.targets)):
             self.targets[i] = np.random.choice(self.num_classes, p=p[i])
