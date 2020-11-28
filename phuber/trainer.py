@@ -12,6 +12,25 @@ from phuber.metrics import AccuracyMetric, LossMetric
 
 
 class Trainer:
+    """ Model trainer
+
+    Args:
+        model: model to train
+        loss_fn: loss function
+        optimizer: model optimizer
+        epochs: number of epochs
+        device: device to train the model on
+        train_loader: training dataloader
+        val_loader: validation dataloader
+        scheduler: learning rate scheduler
+        update_sched_on_iter: whether to call the scheduler every iter or every epoch
+        grad_clip_val: gradient clipping max norm (disabled if None)
+        writer: writer which logs metrics to TensorBoard (disabled if None)
+        save_path: folder in which to save models (disabled if None)
+        checkpoint_path: path to model checkpoint, to resume training
+
+    """
+
     def __init__(
         self,
         model: torch.nn.Module,
@@ -64,7 +83,7 @@ class Trainer:
         self.val_acc_metric = AccuracyMetric(k=1)
 
     def train(self) -> None:
-        """ Launches the training process
+        """ Trains the model
         """
         self.logger.info("Beginning training")
         start_time = time.time()

@@ -17,7 +17,13 @@ from phuber.transform import cifar10_transform, cifar100_transform, mnist_transf
 from phuber.utils import flatten, to_clean_str
 
 
-def train(cfg: DictConfig):
+def train(cfg: DictConfig) -> None:
+    """ Trains model from config
+
+    Args:
+        cfg: Hydra config
+
+    """
     # Logger
     logger = logging.getLogger()
 
@@ -93,6 +99,11 @@ def train(cfg: DictConfig):
 
 
 def evaluate(cfg: DictConfig) -> None:
+    """ Evaluates model from config
+
+    Args:
+        cfg: Hydra config
+    """
     # Logger
     logger = logging.getLogger()
 
@@ -143,6 +154,15 @@ def evaluate(cfg: DictConfig) -> None:
 
 
 def get_device(cfg: DictConfig) -> torch.device:
+    """ Initializes the device from config
+
+    Args:
+        cfg: Hydra config
+
+    Returns:
+        device on which the model will be trained or evaluated
+
+    """
     if cfg.auto_cpu_if_no_gpu:
         device = (
             torch.device(cfg.device)

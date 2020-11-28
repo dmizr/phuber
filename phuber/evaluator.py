@@ -9,6 +9,16 @@ from phuber.metrics import AccuracyMetric
 
 
 class Evaluator:
+    """ Model evaluator
+
+    Args:
+        model: model to be evaluated
+        device: device on which to evaluate model
+        loader: dataloader on which to evaluate model
+        checkpoint_path: path to model checkpoint
+
+    """
+
     def __init__(
         self,
         model: torch.nn.Module,
@@ -16,7 +26,6 @@ class Evaluator:
         loader: DataLoader,
         checkpoint_path: Optional[str] = None,
     ) -> None:
-
         # Logging
         self.logger = logging.getLogger()
 
