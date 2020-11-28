@@ -1,0 +1,5 @@
+numpy
+torch
+torchvision
+hydra-core
+tqdm
