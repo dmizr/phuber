@@ -17,39 +17,38 @@ from phuber.utils import flatten, to_clean_str
 
 
 def train(cfg: DictConfig):
-    logger = logging.getLogger()
-    logger.info(type(cfg.resume))
+    # Device
+    device = get_device(cfg)
+
     # Data
     train_loader, val_loader, test_loader = get_loaders(cfg)
-    logger.info(type(train_loader))
-    logger.info(len(train_loader))
-
-    logger.info(type(test_loader))
-    logger.info(len(test_loader))
 
     # Model
     # Use Hydra's instantiation to initialize directly from the config file
-    model: torch.nn.Module = instantiate(cfg.model)
-    loss_fn: torch.nn.Module = instantiate(cfg.loss)
+    model: torch.nn.Module = instantiate(cfg.model).to(device)
+    loss_fn: torch.nn.Module = instantiate(cfg.loss).to(device)
     optimizer: torch.optim.Optimizer = instantiate(
         cfg.hparams.optimizer, model.parameters()
     )
     scheduler = instantiate(cfg.hparams.scheduler, optimizer)
     update_sched_on_iter = True if isinstance(scheduler, ExponentialDecayLR) else False
 
-    logger.info(f"Net: {type(model)}")
-    logger.info(f"Loss: {type(loss_fn)}")
-    logger.info(f"Optimizer: {type(optimizer)}")
-    logger.info(f"Scheduler: {type(scheduler)}")
-
-    writer = SummaryWriter(os.getcwd()) if cfg.tensorboard else None
+    # Paths
     save_path = os.getcwd() if cfg.save else None
     checkpoint_path = (
         hydra.utils.to_absolute_path(cfg.resume) if cfg.resume is not None else None
     )
 
-    device = get_device(cfg)
+    # Tensorboard
+    if cfg.tensorboard:
+        writer = SummaryWriter(os.getcwd())
+        # Indicate to TensorBoard that the text is preformatted using HTML tags
+        text = f"<pre>{OmegaConf.to_yaml(cfg)}</pre>"
+        writer.add_text("config", text)
+    else:
+        writer = None
 
+    # Trainer init
     trainer = Trainer(
         model=model,
         loss_fn=loss_fn,
@@ -69,14 +68,15 @@ def train(cfg: DictConfig):
     # Launch training process
     trainer.train()
 
-    if test_loader is not None:
-        if writer is not None:
+    # TODO eval
+    if test_loader is not None and False:
+        accuracy = 0
+
+        if cfg.tensorboard:
             res_path = hydra.utils.to_absolute_path(f"results/{cfg.name}/")
             params = flatten(OmegaConf.to_container(cfg, resolve=True))
-            for k, v in params.items():
-                print(f"{k} : {v} | {type(v)}")
             with SummaryWriter(res_path) as w:
-                w.add_hparams(params, {"loss": 10})
+                w.add_hparams(params, {"accuracy": accuracy})
 
 
 def get_device(cfg: DictConfig) -> torch.device:
