@@ -1,8 +1,6 @@
 # @package _global_
 # Default hyper-parameters for lenet used with MNIST
 # more info: https://hydra.cc/docs/patterns/specializing_config
-name: mnist_lenet
-
 hparams:
   epochs: 20
   batch_size: 32

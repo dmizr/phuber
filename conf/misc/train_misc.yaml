@@ -1,5 +1,5 @@
 # @package _global_
-resume: null # add checkpoint path here
+checkpoint: null # add checkpoint path here
 tensorboard: true
 auto_cpu_if_no_gpu: true
 device: cuda:0

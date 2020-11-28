@@ -119,7 +119,7 @@ class Trainer:
 
             # Update progress bar
             pbar.update()
-            pbar.set_postfix_str(f"Loss: {loss.item():.3f}")
+            pbar.set_postfix_str(f"Loss: {loss.item():.3f}", refresh=False)
 
         # Update scheduler if it is epoch-based
         if self.scheduler is not None and not self.update_sched_on_iter:
@@ -151,7 +151,7 @@ class Trainer:
 
                 # Update progress bar
                 pbar.update()
-                pbar.set_postfix_str(f"Loss: {loss.item():.3f}")
+                pbar.set_postfix_str(f"Loss: {loss.item():.3f}", refresh=False)
 
         pbar.close()
 
@@ -186,20 +186,12 @@ class Trainer:
         return s
 
     def _write_to_tb(self, epoch):
-        self.writer.add_scalar(
-            "train loss (epoch)", self.train_loss_metric.compute(), epoch
-        )
-        self.writer.add_scalar(
-            "train acc (epoch)", self.train_acc_metric.compute(), epoch
-        )
+        self.writer.add_scalar("Loss/train", self.train_loss_metric.compute(), epoch)
+        self.writer.add_scalar("Accuracy/train", self.train_acc_metric.compute(), epoch)
 
         if self.val_loader is not None:
-            self.writer.add_scalar(
-                "val loss (epoch)", self.val_loss_metric.compute(), epoch
-            )
-            self.writer.add_scalar(
-                "val acc (epoch)", self.val_acc_metric.compute(), epoch
-            )
+            self.writer.add_scalar("Loss/val", self.val_loss_metric.compute(), epoch)
+            self.writer.add_scalar("Accuracy/val", self.val_acc_metric.compute(), epoch)
 
     def _save_model(self, path, epoch):
         obj = {

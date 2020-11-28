@@ -1,3 +1,4 @@
+import logging
 import os
 from typing import Optional, Tuple
 
@@ -9,6 +10,7 @@ from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 
 from phuber.dataset import NoisyCIFAR10, NoisyCIFAR100, NoisyMNIST
+from phuber.evaluator import Evaluator
 from phuber.scheduler import ExponentialDecayLR
 from phuber.trainer import Trainer
 from phuber.transform import cifar10_transform, cifar100_transform, mnist_transform
@@ -16,6 +18,9 @@ from phuber.utils import flatten, to_clean_str
 
 
 def train(cfg: DictConfig):
+    # Logger
+    logger = logging.getLogger()
+
     # Device
     device = get_device(cfg)
 
@@ -35,11 +40,14 @@ def train(cfg: DictConfig):
     # Paths
     save_path = os.getcwd() if cfg.save else None
     checkpoint_path = (
-        hydra.utils.to_absolute_path(cfg.resume) if cfg.resume is not None else None
+        hydra.utils.to_absolute_path(cfg.checkpoint)
+        if cfg.checkpoint is not None
+        else None
     )
 
     # Tensorboard
     if cfg.tensorboard:
+        # Note: global step is in epochs here
         writer = SummaryWriter(os.getcwd())
         # Indicate to TensorBoard that the text is pre-formatted
         text = f"<pre>{OmegaConf.to_yaml(cfg)}</pre>"
@@ -67,15 +75,71 @@ def train(cfg: DictConfig):
     # Launch training process
     trainer.train()
 
-    # TODO eval
-    if test_loader is not None and False:
-        accuracy = 0
+    if test_loader is not None:
+        logger.info("\nEvaluating on test data")
+        evaluator = Evaluator(
+            model=model, device=device, loader=test_loader, checkpoint_path=None
+        )
+        accuracy = evaluator.evaluate()
+
+        if writer:
+            writer.add_scalar("Eval/Accuracy/test", accuracy, -1)
 
         if cfg.tensorboard:
-            res_path = hydra.utils.to_absolute_path(f"results/{cfg.name}/")
+            res_path = hydra.utils.to_absolute_path(f"results/{cfg.dataset.name}/")
             params = flatten(OmegaConf.to_container(cfg, resolve=True))
             with SummaryWriter(res_path) as w:
                 w.add_hparams(params, {"accuracy": accuracy})
+
+
+def evaluate(cfg: DictConfig) -> None:
+    # Logger
+    logger = logging.getLogger()
+
+    # Device
+    device = get_device(cfg)
+
+    # Data
+    train_loader, val_loader, test_loader = get_loaders(cfg)
+
+    # Model
+    model: torch.nn.Module = instantiate(cfg.model).to(device)
+
+    checkpoint_path = hydra.utils.to_absolute_path(cfg.checkpoint)
+
+    if train_loader is not None:
+        logger.info("Evaluating on training data")
+        evaluator = Evaluator(
+            model=model,
+            device=device,
+            loader=train_loader,
+            checkpoint_path=checkpoint_path,
+        )
+        evaluator.evaluate()
+        # Remove checkpoint loading for other loaders
+        checkpoint_path = None
+
+    if val_loader is not None:
+        logger.info("Evaluating on validation data")
+        evaluator = Evaluator(
+            model=model,
+            device=device,
+            loader=test_loader,
+            checkpoint_path=checkpoint_path,
+        )
+        evaluator.evaluate()
+        # Remove checkpoint loading for other loaders
+        checkpoint_path = None
+
+    if test_loader is not None:
+        logger.info("Evaluating on test data")
+        evaluator = Evaluator(
+            model=model,
+            device=device,
+            loader=test_loader,
+            checkpoint_path=checkpoint_path,
+        )
+        evaluator.evaluate()
 
 
 def get_device(cfg: DictConfig) -> torch.device:
