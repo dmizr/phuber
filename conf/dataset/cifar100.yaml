@@ -9,5 +9,7 @@ train:
   corrupt_prob: 0.0
   noise_seed: 0
 
+val:
+  split: null
+
 test:
-  use: true

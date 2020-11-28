@@ -1,0 +1,12 @@
+# @package _global_
+resume: ??? # add checkpoint path here
+auto_gpu: true # uses gpu only if there is one
+device: cuda:0
+
+dataset:
+  train:
+    use: false
+  val:
+    use: false
+  test:
+    use: true

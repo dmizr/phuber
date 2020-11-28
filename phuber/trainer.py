@@ -8,7 +8,7 @@ import tqdm
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 
-from phuber.utils import AccuracyMetric, LossMetric
+from phuber.metrics import AccuracyMetric, LossMetric
 
 
 class Trainer:
@@ -80,7 +80,7 @@ class Trainer:
             self._end_loop(epoch, epoch_time)
 
         train_time_h = (time.time() - start_time) / 3600
-        self.logger.info(f" Finished training! Total time: {train_time_h:.2f}h")
+        self.logger.info(f"Finished training! Total time: {train_time_h:.2f}h")
         self._save_model(os.path.join(self.save_path, "final_model.pt"), self.epochs)
 
     def _train_loop(self, epoch: int) -> None:
@@ -119,7 +119,7 @@ class Trainer:
 
             # Update progress bar
             pbar.update()
-            pbar.set_postfix(f"Loss: {loss.item():.3f}")
+            pbar.set_postfix_str(f"Loss: {loss.item():.3f}")
 
         # Update scheduler if it is epoch-based
         if self.scheduler is not None and not self.update_sched_on_iter:
@@ -151,7 +151,7 @@ class Trainer:
 
                 # Update progress bar
                 pbar.update()
-                pbar.set_postfix(f"Loss: {loss.item():.3f}")
+                pbar.set_postfix_str(f"Loss: {loss.item():.3f}")
 
         pbar.close()
 
@@ -179,8 +179,8 @@ class Trainer:
         s += f"| Train loss: {self.train_loss_metric.compute():.3f} "
         s += f"| Train acc: {self.train_acc_metric.compute():.3f} "
         if self.val_loader is not None:
-            s += f"| Train loss: {self.val_loss_metric.compute():.3f} "
-            s += f"| Train acc: {self.val_acc_metric.compute():.3f} "
+            s += f"| Val loss: {self.val_loss_metric.compute():.3f} "
+            s += f"| Val acc: {self.val_acc_metric.compute():.3f} "
         s += f"| Epoch time: {epoch_time:.1f}s"
 
         return s
@@ -206,22 +206,23 @@ class Trainer:
             "epoch": epoch + 1,
             "optimizer": self.optimizer.state_dict(),
             "model": self.model.state_dict(),
+            "scheduler": self.scheduler.state_dict()
+            if self.scheduler is not None
+            else None,
         }
-        if self.scheduler is not None:
-            obj["scheduler"] = self.scheduler.state_dict()
-
         torch.save(obj, os.path.join(self.save_path, path))
 
     def _load_from_checkpoint(self, checkpoint_path: str) -> None:
         checkpoint = torch.load(checkpoint_path, map_location=self.device)
         self.model.load_state_dict(checkpoint["model"])
-        self.optimizer.load_state_dict(checkpoint["model"])
-        self.start_epoch = checkpoint["start_epoch"]
+        self.optimizer.load_state_dict(checkpoint["optimizer"])
+
+        self.start_epoch = checkpoint["epoch"]
 
         if self.scheduler:
-            self.scheduler.load_state_dict(checkpoint["optimizer"])
+            self.scheduler.load_state_dict(checkpoint["scheduler"])
 
         if self.start_epoch > self.epochs:
             raise ValueError("Starting epoch is larger than total epochs")
 
-        self.logger.info("Loaded model from checkpoint")
+        self.logger.info(f"Checkpoint loaded, resuming from epoch {self.start_epoch}")

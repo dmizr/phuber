@@ -1,3 +1,5 @@
+import warnings
+
 import torch
 
 
@@ -40,6 +42,17 @@ class ExponentialDecayLR(torch.optim.lr_scheduler.LambdaLR):
 
         super().__init__(optimizer, lr_lambda=decay, last_epoch=last_epoch)
 
+    def load_state_dict(self, state_dict: dict) -> None:
+        # Bypass save state warning from _LambdaLR scheduler
+        with warnings.catch_warnings(record=True):
+            super().load_state_dict(state_dict)
+
+    def state_dict(self) -> dict:
+        # Bypass save state warning from _LambdaLR scheduler
+        # More info: https://github.com/pytorch/pytorch/issues/46405
+        with warnings.catch_warnings(record=True):
+            return super().state_dict()
+
 
 class ConstantLR(torch.optim.lr_scheduler.LambdaLR):
     """Keeps the learning rate constant (does nothing).
@@ -55,3 +68,14 @@ class ConstantLR(torch.optim.lr_scheduler.LambdaLR):
 
         decay = lambda epoch: 1
         super().__init__(optimizer, lr_lambda=decay, last_epoch=last_epoch)
+
+    def load_state_dict(self, state_dict: dict) -> None:
+        # Bypass save state warning from _LambdaLR scheduler
+        with warnings.catch_warnings(record=True):
+            super().load_state_dict(state_dict)
+
+    def state_dict(self) -> dict:
+        # Bypass save state warning from _LambdaLR scheduler
+        # More info: https://github.com/pytorch/pytorch/issues/46405
+        with warnings.catch_warnings(record=True):
+            return super().state_dict()

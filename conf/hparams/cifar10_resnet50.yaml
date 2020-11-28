@@ -1,12 +1,15 @@
 # @package _global_
 # changes hyper-parameters of model if resnet-50 used with cifar-10
 # more info: https://hydra.cc/docs/patterns/specializing_config
+name: cifar10_resnet50
+
 model:
   num_classes: 10
 
 hparams:
   epochs: 400
   batch_size: 64
+  grad_clip_val: null # change to float to activate
 
   optimizer:
     _target_: torch.optim.SGD

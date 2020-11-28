@@ -1,6 +1,7 @@
+import logging
 import re
 
-import torch
+from omegaconf import DictConfig, OmegaConf
 
 
 def to_clean_str(s: str) -> str:
@@ -15,51 +16,30 @@ def to_clean_str(s: str) -> str:
     return re.sub("[^a-zA-Z0-9]", "", s).lower()
 
 
-class LossMetric:
-    """ Keeps track of the loss over an epoch
-    """
-
-    def __init__(self) -> None:
-        self.running_loss = 0
-        self.count = 0
-
-    def update(self, loss: float, batch_size: int) -> None:
-        self.running_loss += loss * batch_size
-        self.count += batch_size
-
-    def compute(self) -> float:
-        return self.running_loss / self.count
-
-    def reset(self) -> None:
-        self.running_loss = 0
-        self.count = 0
+def display_config(cfg: DictConfig):
+    logger = logging.getLogger()
+    logger.info("Configuration:\n")
+    logger.info(OmegaConf.to_yaml(cfg))
+    logger.info("=" * 40 + "\n")
 
 
-class AccuracyMetric:
-    """ Keeps track of the top-k accuracy over an epoch
+def flatten(d: dict, parent_key: str = "", sep: str = ".") -> dict:
+    """ Recursively flattens a dictionary
 
     Args:
-        k (int): Value of k for top-k accuracy
+        d: Dictionary to flatten
+        parent_key: key of parent dictionary
+        sep: separator between key and child key
+
+    Returns:
+        flattened dictionary
+
     """
-
-    def __init__(self, k: int = 1) -> None:
-        self.correct = 0
-        self.total = 0
-        self.k = k
-
-    def update(self, out: torch.Tensor, target: torch.Tensor) -> None:
-        # Computes top-k accuracy
-        _, indices = torch.topk(out, self.k, dim=-1)
-        target_in_top_k = torch.eq(indices, target[:, None]).bool().any(-1)
-        total_correct = torch.sum(target_in_top_k, dtype=torch.int).item()
-        total_samples = target.shape[0]
-
-        self.correct += total_correct
-        self.total += total_samples
-
-    def compute(self) -> float:
-        return self.correct / self.total
-
-    def reset(self) -> None:
-        self.correct = 0
-        self.total = 0
+    items = []
+    for k, v in d.items():
+        new_key = f"{parent_key}{sep}{k}" if parent_key else k
+        if isinstance(v, dict):
+            items.extend(flatten(v, new_key, sep=sep).items())
+        else:
+            items.append((new_key, v))
+    return dict(items)

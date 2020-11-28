@@ -1,0 +1,9 @@
+defaults:
+  - dataset: mnist
+  - model: lenet
+  - misc: eval_misc
+
+  - hydra/job_logging: custom
+  - hydra/output: custom
+
+
