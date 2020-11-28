@@ -38,18 +38,26 @@ class NoisyMNIST(MNIST):
         if self.corrupt_prob < 0 or self.corrupt_prob > 1:
             raise ValueError(f"Invalid noise probability: {self.corrupt_prob}")
 
-        if self.corrupt_prob > 0:
-            if self.noise_seed is not None:
-                np.random.seed(self.noise_seed)
+        if self.corrupt_prob == 0:
+            return
 
+<<<<<<< HEAD:phuber/dataset.py
             p = np.ones((len(self.targets), self.num_classes))
             p = p * (self.corrupt_prob / (self.num_classes - 1))
             p[np.arange(len(self.targets)), self.targets.numpy()] = (
                 1 - self.corrupt_prob
             )
+=======
+        if self.noise_seed is not None:
+            np.random.seed(self.noise_seed)
+>>>>>>> master:phuber/datasets.py
 
-            for i in range(len(self.targets)):
-                self.targets[i] = np.random.choice(self.num_classes, p=p[i])
+        p = np.ones((len(self.targets), self.num_classes))
+        p = p * (self.corrupt_prob / (self.num_classes - 1))
+        p[np.arange(len(self.targets)), self.targets.numpy()] = 1 - self.corrupt_prob
+
+        for i in range(len(self.targets)):
+            self.targets[i] = np.random.choice(self.num_classes, p=p[i])
 
 
 class NoisyCIFAR10(CIFAR10):
@@ -87,18 +95,26 @@ class NoisyCIFAR10(CIFAR10):
         if self.corrupt_prob < 0 or self.corrupt_prob > 1:
             raise ValueError(f"Invalid noise probability: {self.corrupt_prob}")
 
-        if self.corrupt_prob > 0:
-            if self.noise_seed is not None:
-                np.random.seed(self.noise_seed)
+        if self.corrupt_prob == 0:
+            return
 
+        if self.noise_seed is not None:
+            np.random.seed(self.noise_seed)
+
+<<<<<<< HEAD:phuber/dataset.py
             p = np.ones((len(self.targets), self.num_classes))
             p = p * (self.corrupt_prob / (self.num_classes - 1))
             p[np.arange(len(self.targets)), self.targets.numpy()] = (
                 1 - self.corrupt_prob
             )
+=======
+        p = np.ones((len(self.targets), self.num_classes))
+        p = p * (self.corrupt_prob / (self.num_classes - 1))
+        p[np.arange(len(self.targets)), self.targets.numpy()] = 1 - self.corrupt_prob
+>>>>>>> master:phuber/datasets.py
 
-            for i in range(len(self.targets)):
-                self.targets[i] = np.random.choice(self.num_classes, p=p[i])
+        for i in range(len(self.targets)):
+            self.targets[i] = np.random.choice(self.num_classes, p=p[i])
 
 
 class NoisyCIFAR100(CIFAR100):
@@ -136,15 +152,23 @@ class NoisyCIFAR100(CIFAR100):
         if self.corrupt_prob < 0 or self.corrupt_prob > 1:
             raise ValueError(f"Invalid noise probability: {self.corrupt_prob}")
 
-        if self.corrupt_prob > 0:
-            if self.noise_seed is not None:
-                np.random.seed(self.noise_seed)
+        if self.corrupt_prob == 0:
+            return
 
+        if self.noise_seed is not None:
+            np.random.seed(self.noise_seed)
+
+<<<<<<< HEAD:phuber/dataset.py
             p = np.ones((len(self.targets), self.num_classes))
             p = p * (self.corrupt_prob / (self.num_classes - 1))
             p[np.arange(len(self.targets)), self.targets.numpy()] = (
                 1 - self.corrupt_prob
             )
+=======
+        p = np.ones((len(self.targets), self.num_classes))
+        p = p * (self.corrupt_prob / (self.num_classes - 1))
+        p[np.arange(len(self.targets)), self.targets.numpy()] = 1 - self.corrupt_prob
+>>>>>>> master:phuber/datasets.py
 
-            for i in range(len(self.targets)):
-                self.targets[i] = np.random.choice(self.num_classes, p=p[i])
+        for i in range(len(self.targets)):
+            self.targets[i] = np.random.choice(self.num_classes, p=p[i])
