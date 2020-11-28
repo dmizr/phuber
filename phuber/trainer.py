@@ -12,7 +12,7 @@ from phuber.metrics import AccuracyMetric, LossMetric
 
 
 class Trainer:
-    """ Model trainer
+    """Model trainer
 
     Args:
         model: model to train
@@ -83,8 +83,7 @@ class Trainer:
         self.val_acc_metric = AccuracyMetric(k=1)
 
     def train(self) -> None:
-        """ Trains the model
-        """
+        """Trains the model"""
         self.logger.info("Beginning training")
         start_time = time.time()
 

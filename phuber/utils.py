@@ -18,8 +18,7 @@ def to_clean_str(s: str) -> str:
 
 
 def display_config(cfg: DictConfig) -> None:
-    """ Displays the configuration
-    """
+    """Displays the configuration"""
     logger = logging.getLogger()
     logger.info("Configuration:\n")
     logger.info(OmegaConf.to_yaml(cfg))
@@ -27,7 +26,7 @@ def display_config(cfg: DictConfig) -> None:
 
 
 def flatten(d: Union[dict, list], parent_key: str = "", sep: str = ".") -> dict:
-    """ Flattens a dictionary or list into a flat dictionary
+    """Flattens a dictionary or list into a flat dictionary
 
     Args:
         d: dictionary or list to flatten

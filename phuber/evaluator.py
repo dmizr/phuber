@@ -9,7 +9,7 @@ from phuber.metrics import AccuracyMetric
 
 
 class Evaluator:
-    """ Model evaluator
+    """Model evaluator
 
     Args:
         model: model to be evaluated
@@ -45,7 +45,7 @@ class Evaluator:
         self.acc_metric = AccuracyMetric(k=1)
 
     def evaluate(self) -> float:
-        """ Evaluates the model
+        """Evaluates the model
 
         Returns:
             (float) accuracy (on a 0 to 1 scale)

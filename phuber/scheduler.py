@@ -64,7 +64,11 @@ class ConstantLR(torch.optim.lr_scheduler.LambdaLR):
         last_epoch (int): The index of last epoch. Default: -1.
     """
 
-    def __init__(self, optimizer: torch.optim.Optimizer, last_epoch: int = -1,) -> None:
+    def __init__(
+        self,
+        optimizer: torch.optim.Optimizer,
+        last_epoch: int = -1,
+    ) -> None:
 
         decay = lambda epoch: 1
         super().__init__(optimizer, lr_lambda=decay, last_epoch=last_epoch)

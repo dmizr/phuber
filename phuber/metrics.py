@@ -2,8 +2,7 @@ import torch
 
 
 class LossMetric:
-    """ Keeps track of the loss over an epoch
-    """
+    """Keeps track of the loss over an epoch"""
 
     def __init__(self) -> None:
         self.running_loss = 0
@@ -22,7 +21,7 @@ class LossMetric:
 
 
 class AccuracyMetric:
-    """ Keeps track of the top-k accuracy over an epoch
+    """Keeps track of the top-k accuracy over an epoch
 
     Args:
         k (int): Value of k for top-k accuracy

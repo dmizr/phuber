@@ -18,7 +18,7 @@ from phuber.utils import flatten, to_clean_str
 
 
 def train(cfg: DictConfig) -> None:
-    """ Trains model from config
+    """Trains model from config
 
     Args:
         cfg: Hydra config
@@ -99,7 +99,7 @@ def train(cfg: DictConfig) -> None:
 
 
 def evaluate(cfg: DictConfig) -> None:
-    """ Evaluates model from config
+    """Evaluates model from config
 
     Args:
         cfg: Hydra config
@@ -154,7 +154,7 @@ def evaluate(cfg: DictConfig) -> None:
 
 
 def get_device(cfg: DictConfig) -> torch.device:
-    """ Initializes the device from config
+    """Initializes the device from config
 
     Args:
         cfg: Hydra config
@@ -178,7 +178,7 @@ def get_device(cfg: DictConfig) -> torch.device:
 def get_loaders(
     cfg: DictConfig,
 ) -> Tuple[Optional[DataLoader], Optional[DataLoader], Optional[DataLoader]]:
-    """ Initializes the training, validation, test data & loaders from config
+    """Initializes the training, validation, test data & loaders from config
 
     Args:
         cfg: Hydra config
