@@ -42,7 +42,7 @@ def train(cfg: DictConfig):
     # Tensorboard
     if cfg.tensorboard:
         writer = SummaryWriter(os.getcwd())
-        # Indicate to TensorBoard that the text is preformatted using HTML tags
+        # Indicate to TensorBoard that the text is pre-formatted
         text = f"<pre>{OmegaConf.to_yaml(cfg)}</pre>"
         writer.add_text("config", text)
     else:
