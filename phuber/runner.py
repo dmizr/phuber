@@ -61,6 +61,7 @@ def train(cfg: DictConfig):
         scheduler=scheduler,
         update_sched_on_iter=update_sched_on_iter,
         grad_clip_val=cfg.hparams.grad_clip_val,
+        writer=writer,
         save_path=save_path,
         checkpoint_path=checkpoint_path,
     )
@@ -68,12 +69,14 @@ def train(cfg: DictConfig):
     # Launch training process
     trainer.train()
 
-    if test_loader is not None and False:
+    if test_loader is not None:
         if writer is not None:
-            result_path = hydra.utils.to_absolute_path("results/")
+            res_path = hydra.utils.to_absolute_path(f"results/{cfg.name}/")
             params = flatten(OmegaConf.to_container(cfg, resolve=True))
-            with SummaryWriter(result_path) as w:
-                w.add_hparams(params, {})
+            for k, v in params.items():
+                print(f"{k} : {v} | {type(v)}")
+            with SummaryWriter(res_path) as w:
+                w.add_hparams(params, {"loss": 10})
 
 
 def get_device(cfg: DictConfig) -> torch.device:

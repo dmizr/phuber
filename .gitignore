@@ -131,8 +131,14 @@ dmypy.json
 # Data folder
 data/
 
-# Experiments folder
-experiments/
+# Outputs folder
+outputs/
+
+# Results folder
+results/
 
 # PyCharm files
 .idea/
+
+# macOS DS_Store
+.DS_Store
