@@ -1,13 +1,12 @@
-from typing import Optional, Callable
-import numpy as np
+from typing import Callable, Optional
 
-from torchvision.datasets import MNIST
-from torchvision.datasets import CIFAR10
-from torchvision.datasets import CIFAR100
+import numpy as np
+from torchvision.datasets import CIFAR10, CIFAR100, MNIST
 
 
 class NoisyMNIST(MNIST):
-    """Extends `torchvision.datasets.MNIST <https://pytorch.org/docs/stable/torchvision/datasets.html#mnist>`_
+    """Extends `torchvision.datasets.MNIST
+    <https://pytorch.org/docs/stable/torchvision/datasets.html#mnist>`_
     class by corrupting the labels with a fixed probability
     """
 
@@ -47,14 +46,15 @@ class NoisyMNIST(MNIST):
 
         p = np.ones((len(self.targets), self.num_classes))
         p = p * (self.corrupt_prob / (self.num_classes - 1))
-        p[np.arange(len(self.targets)), self.targets.numpy()] = 1 - self.corrupt_prob
+        p[np.arange(len(self.targets)), self.targets] = 1 - self.corrupt_prob
 
         for i in range(len(self.targets)):
             self.targets[i] = np.random.choice(self.num_classes, p=p[i])
 
 
 class NoisyCIFAR10(CIFAR10):
-    """Extends `torchvision.datasets.CIFAR10 <https://pytorch.org/docs/stable/torchvision/datasets.html#cifar>`_
+    """Extends `torchvision.datasets.CIFAR10
+    <https://pytorch.org/docs/stable/torchvision/datasets.html#cifar>`_
     class by corrupting the labels with a fixed probability
     """
 
@@ -95,14 +95,15 @@ class NoisyCIFAR10(CIFAR10):
 
         p = np.ones((len(self.targets), self.num_classes))
         p = p * (self.corrupt_prob / (self.num_classes - 1))
-        p[np.arange(len(self.targets)), self.targets.numpy()] = 1 - self.corrupt_prob
+        p[np.arange(len(self.targets)), self.targets] = 1 - self.corrupt_prob
 
         for i in range(len(self.targets)):
             self.targets[i] = np.random.choice(self.num_classes, p=p[i])
 
 
 class NoisyCIFAR100(CIFAR100):
-    """Extends `torchvision.datasets.CIFAR100 <https://pytorch.org/docs/stable/torchvision/datasets.html#cifar>`_
+    """Extends `torchvision.datasets.CIFAR100
+    <https://pytorch.org/docs/stable/torchvision/datasets.html#cifar>`_
     class by corrupting the labels with a fixed probability
     """
 
@@ -143,7 +144,7 @@ class NoisyCIFAR100(CIFAR100):
 
         p = np.ones((len(self.targets), self.num_classes))
         p = p * (self.corrupt_prob / (self.num_classes - 1))
-        p[np.arange(len(self.targets)), self.targets.numpy()] = 1 - self.corrupt_prob
+        p[np.arange(len(self.targets)), self.targets] = 1 - self.corrupt_prob
 
         for i in range(len(self.targets)):
             self.targets[i] = np.random.choice(self.num_classes, p=p[i])

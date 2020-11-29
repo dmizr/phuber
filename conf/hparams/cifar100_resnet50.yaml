@@ -1,0 +1,21 @@
+# @package _global_
+# changes hyper-parameters of model if resnet-50 used with cifar-100
+# more info: https://hydra.cc/docs/patterns/specializing_config
+model:
+  num_classes: 100
+
+hparams:
+  epochs: 200
+  batch_size: 128
+  grad_clip_val: null # change to float to activate
+
+  optimizer:
+    _target_: torch.optim.SGD
+    lr: 0.1
+    weight_decay: 5e-3
+    momentum: 0.1
+
+  scheduler:
+    _target_: torch.optim.lr_scheduler.MultiStepLR
+    milestones: [60, 120, 160]
+    gamma: 0.2
