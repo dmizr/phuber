@@ -1,0 +1,5 @@
+# @package _group_
+_target_: torchvision.models.resnet50
+pretrained: false
+# num_classes gets set to 10 when used with cifar-10, to 100 when used with cifar-100
+# more info: https://hydra.cc/docs/patterns/specializing_config

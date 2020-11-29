@@ -1,0 +1,15 @@
+# @package _global_
+checkpoint: ??? # add checkpoint path here
+auto_cpu_if_no_gpu: true
+device: cuda:0
+
+hparams:
+  batch_size: 32 # change if needed
+
+dataset:
+  train:
+    use: false
+  val:
+    use: false
+  test:
+    use: true
