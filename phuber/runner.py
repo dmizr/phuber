@@ -257,7 +257,7 @@ def get_loaders(
             val_loader = DataLoader(
                 val_set,
                 batch_size=cfg.hparams.batch_size,
-                shuffle=True,
+                shuffle=False,
                 num_workers=cfg.dataset.num_workers,
             )
 
