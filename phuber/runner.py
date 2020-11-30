@@ -1,12 +1,13 @@
+import collections
 import logging
 import os
-from typing import Optional, Tuple
+from typing import Optional, Tuple, TypeVar
 
 import hydra
 import torch
 from hydra.utils import instantiate
 from omegaconf import DictConfig, OmegaConf
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, Dataset, Subset, random_split
 from torch.utils.tensorboard import SummaryWriter
 
 from phuber.dataset import NoisyCIFAR10, NoisyCIFAR100, NoisyMNIST
@@ -15,6 +16,8 @@ from phuber.scheduler import ExponentialDecayLR
 from phuber.trainer import Trainer
 from phuber.transform import cifar10_transform, cifar100_transform, mnist_transform
 from phuber.utils import flatten, to_clean_str
+
+T = TypeVar("T")
 
 
 def train(cfg: DictConfig) -> None:
@@ -219,6 +222,13 @@ def get_loaders(
             corrupt_prob=cfg.dataset.train.corrupt_prob,
             noise_seed=cfg.dataset.train.noise_seed,
         )
+        if cfg.dataset.val.use and cfg.dataset.val.split is not None:
+            train_set, _ = split_dataset(
+                dataset=train_set,
+                split=cfg.dataset.val.split,
+                seed=cfg.dataset.val.seed,
+            )
+
         train_loader = DataLoader(
             train_set,
             batch_size=cfg.hparams.batch_size,
@@ -229,8 +239,34 @@ def get_loaders(
         train_loader = None
 
     # Validation
-    # TODO
-    val_loader = None
+    if cfg.dataset.val.use:
+        if cfg.dataset.val.split is not None and cfg.dataset.val.split != 0.0:
+            val_set = dataset(
+                root,
+                train=True,
+                transform=test_transform,
+                download=cfg.dataset.download,
+                corrupt_prob=cfg.dataset.train.corrupt_prob,
+                noise_seed=cfg.dataset.train.noise_seed,
+            )
+            _, val_set = split_dataset(
+                dataset=val_set,
+                split=cfg.dataset.val.split,
+                seed=cfg.dataset.val.seed,
+            )
+            val_loader = DataLoader(
+                val_set,
+                batch_size=cfg.hparams.batch_size,
+                shuffle=True,
+                num_workers=cfg.dataset.num_workers,
+            )
+
+        else:
+            logger = logging.getLogger()
+            logger.info("No validation set will be used, as no split value was given.")
+            val_loader = None
+    else:
+        val_loader = None
 
     # Test
     if cfg.dataset.test.use:
@@ -251,3 +287,33 @@ def get_loaders(
         test_loader = None
 
     return train_loader, val_loader, test_loader
+
+
+def split_dataset(dataset: Dataset, split: float, seed: int) -> Tuple[Subset, Subset]:
+    """Splits dataset into a train / val set based on a split value and seed
+
+    Args:
+        dataset: dataset to split
+        split: The proportion of the dataset to include in the validation split,
+            must be between 0 and 1.
+        seed: Seed used to generate the split
+
+    Returns:
+        Subsets of the input dataset
+
+    """
+    # Verify that the dataset is Sized
+    if not isinstance(dataset, collections.abc.Sized):
+        raise ValueError("Dataset is not Sized!")
+
+    if not (0 <= split <= 1):
+        raise ValueError(f"Split value must be between 0 and 1. Value: {split}")
+
+    val_length = int(len(dataset) * split)
+    train_length = len(dataset) - val_length
+    splits = random_split(
+        dataset,
+        [train_length, val_length],
+        generator=torch.Generator().manual_seed(seed),
+    )
+    return splits
