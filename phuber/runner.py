@@ -1,7 +1,7 @@
 import collections
 import logging
 import os
-from typing import Optional, Tuple, TypeVar
+from typing import Optional, Tuple
 
 import hydra
 import torch
@@ -16,8 +16,6 @@ from phuber.scheduler import ExponentialDecayLR
 from phuber.trainer import Trainer
 from phuber.transform import cifar10_transform, cifar100_transform, mnist_transform
 from phuber.utils import flatten, to_clean_str
-
-T = TypeVar("T")
 
 
 def train(cfg: DictConfig) -> None:
