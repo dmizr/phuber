@@ -10,6 +10,7 @@ train:
   noise_seed: 0
 
 val:
-  split: null
+  split: null # to activate split, use value in the range [0, 1]
+  seed: 1234
 
 test:
