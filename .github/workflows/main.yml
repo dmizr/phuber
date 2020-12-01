@@ -1,4 +1,4 @@
-name: CI
+name: Check Style
 
 # Controls when the action will run. 
 on:
@@ -12,19 +12,28 @@ on:
   workflow_dispatch:
 
 jobs:
-  # This workflow contains a single job called "build"
+  # This workflow contains a job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-      
-      # Check that code is correctly formatted
-      - name: Black Code Formatter
-        uses: lgeiger/black-action@v1.0.1
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
         with:
-          args: ". --check"
-    
+          python-version: '3.8'
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+      - name: Check formatting with Black
+        run: black . --check
+      - name: Lint with flake8
+        run: flake8 .
+      - name: Check imports with isort
+        run: isort . --check
