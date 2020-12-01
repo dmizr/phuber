@@ -1,7 +1,7 @@
 defaults:
   - dataset: mnist
   - model: lenet
-  - loss: ce
+  - loss: phuber_ce
   - hparams: ${defaults.0.dataset}_${defaults.1.model} # change when Hydra 1.1 releases
     optional: false # more info: https://hydra.cc/docs/patterns/specializing_config
     # Note: hyper-parameters are automatically set when specifying dataset and model
