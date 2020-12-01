@@ -9,7 +9,7 @@ from omegaconf import DictConfig, OmegaConf
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 
-from phuber.dataset import NoisyCIFAR10, NoisyCIFAR100, NoisyMNIST
+from phuber.dataset import NoisyCIFAR10, NoisyCIFAR100, NoisyMNIST, split_dataset
 from phuber.evaluator import Evaluator
 from phuber.scheduler import ExponentialDecayLR
 from phuber.trainer import Trainer
@@ -219,6 +219,13 @@ def get_loaders(
             corrupt_prob=cfg.dataset.train.corrupt_prob,
             noise_seed=cfg.dataset.train.noise_seed,
         )
+        if cfg.dataset.val.use and cfg.dataset.val.split is not None:
+            train_set, _ = split_dataset(
+                dataset=train_set,
+                split=cfg.dataset.val.split,
+                seed=cfg.dataset.val.seed,
+            )
+
         train_loader = DataLoader(
             train_set,
             batch_size=cfg.hparams.batch_size,
@@ -229,8 +236,34 @@ def get_loaders(
         train_loader = None
 
     # Validation
-    # TODO
-    val_loader = None
+    if cfg.dataset.val.use:
+        if cfg.dataset.val.split is not None and cfg.dataset.val.split != 0.0:
+            val_set = dataset(
+                root,
+                train=True,
+                transform=test_transform,
+                download=cfg.dataset.download,
+                corrupt_prob=cfg.dataset.train.corrupt_prob,
+                noise_seed=cfg.dataset.train.noise_seed,
+            )
+            _, val_set = split_dataset(
+                dataset=val_set,
+                split=cfg.dataset.val.split,
+                seed=cfg.dataset.val.seed,
+            )
+            val_loader = DataLoader(
+                val_set,
+                batch_size=cfg.hparams.batch_size,
+                shuffle=False,
+                num_workers=cfg.dataset.num_workers,
+            )
+
+        else:
+            logger = logging.getLogger()
+            logger.info("No validation set will be used, as no split value was given.")
+            val_loader = None
+    else:
+        val_loader = None
 
     # Test
     if cfg.dataset.test.use:
