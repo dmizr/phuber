@@ -9,6 +9,6 @@ dataset:
   train:
     use: true
   val:
-    use: false
+    use: true
   test:
     use: true
