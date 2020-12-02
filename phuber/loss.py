@@ -40,10 +40,9 @@ class PHuberCrossEntropyWithLogSoftmax(nn.Module):
 
 
 class PHuberCrossEntropy(nn.Module):
-    def __init__(self, tau: float = 10, epsilon=1e-20) -> None:
+    def __init__(self, tau: float = 10) -> None:
         super().__init__()
         self.tau = tau
-        self.epsilon = epsilon
         self.softmax = nn.Softmax(dim=1)
 
     def forward(self, input: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
