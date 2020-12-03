@@ -29,6 +29,28 @@ class CrossEntropy(nn.Module):
         return torch.mean(loss)
 
 
+class UnhingedLoss(nn.Module):
+    """Computes the Unhinged (linear) loss, from
+    `"Learning with Symmetric Label Noise: The Importance of Being Unhinged"
+    <https://arxiv.org/abs/1505.07634>`_
+
+
+    Shape:
+        - Input: the raw, unnormalized score for each class.
+                tensor of size :math:`(minibatch, C)`, with C the number of classes
+        - Target: the labels, tensor of size :math:`(minibatch)`, where each value
+                is :math:`0 \leq targets[i] \leq C-1`
+        - Output: scalar
+    """
+
+    def forward(self, input: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
+        t = -torch.ones_like(input)
+        t[torch.arange(t.shape[0]), target] = 1
+
+        loss = 1 - torch.mul(input, target)
+        return torch.mean(loss)
+
+
 class PHuberCrossEntropy(nn.Module):
     """Computes the partially Huberised (PHuber) cross-entropy loss, from
     `"Can gradient clipping mitigate label noise?"
