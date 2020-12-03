@@ -73,12 +73,16 @@ class UnhingedLoss(nn.Module):
                 is :math:`0 \leq targets[i] \leq C-1`
         - Output: scalar
     """
+    def __init__(self) -> None:
+        super().__init__()
+        self.softmax = nn.Softmax(dim=1)
 
     def forward(self, input: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
-        t = -torch.ones_like(input)
-        t[torch.arange(t.shape[0]), target] = 1
+        p = self.softmax(input)
+        p = p[torch.arange(p.shape[0]), target]
 
-        loss = 1 - torch.mul(input, target)
+        loss = 1 - p
+
         return torch.mean(loss)
 
 
