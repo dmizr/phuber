@@ -7,7 +7,7 @@ model:
 hparams:
   epochs: 400
   batch_size: 64
-  grad_clip_val: null # change to float to activate
+  grad_clip_max_norm: null # change to float to activate
 
   optimizer:
     _target_: torch.optim.SGD

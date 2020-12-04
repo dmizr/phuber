@@ -24,7 +24,7 @@ class Trainer:
         val_loader: validation dataloader
         scheduler: learning rate scheduler
         update_sched_on_iter: whether to call the scheduler every iter or every epoch
-        grad_clip_val: gradient clipping max norm (disabled if None)
+        grad_clip_max_norm: gradient clipping max norm (disabled if None)
         writer: writer which logs metrics to TensorBoard (disabled if None)
         save_path: folder in which to save models (disabled if None)
         checkpoint_path: path to model checkpoint, to resume training
@@ -42,7 +42,7 @@ class Trainer:
         val_loader: Optional[DataLoader] = None,
         scheduler: Optional = None,  # Type: torch.optim.lr_scheduler._LRScheduler
         update_sched_on_iter: bool = False,
-        grad_clip_val: Optional[float] = None,
+        grad_clip_max_norm: Optional[float] = None,
         writer: Optional[SummaryWriter] = None,
         save_path: Optional[str] = None,
         checkpoint_path: Optional[str] = None,
@@ -68,7 +68,7 @@ class Trainer:
         self.optimizer = optimizer
         self.scheduler = scheduler
         self.update_sched_on_iter = update_sched_on_iter
-        self.grad_clip_val = grad_clip_val
+        self.grad_clip_max_norm = grad_clip_max_norm
         self.epochs = epochs
         self.start_epoch = 0
 
@@ -120,9 +120,9 @@ class Trainer:
             loss = self.loss_fn(out, target)
             loss.backward()
 
-            if self.grad_clip_val is not None:
+            if self.grad_clip_max_norm is not None:
                 torch.nn.utils.clip_grad_norm_(
-                    self.model.parameters(), self.grad_clip_val
+                    self.model.parameters(), self.grad_clip_max_norm
                 )
 
             self.optimizer.step()
