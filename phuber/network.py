@@ -4,6 +4,7 @@ import torch
 import torch.nn as nn
 import torchvision
 from torchvision.models.resnet import BasicBlock, Bottleneck
+from phuber.utils import truncated_normal
 
 
 class LeNet(nn.Module):
@@ -24,10 +25,15 @@ class LeNet(nn.Module):
         self.avgpool = nn.AvgPool2d(kernel_size=2)
         self._init_weights()
 
+    # ref: https://discuss.pytorch.org/t/implementing-truncated-normal-initializer/4778
     def _init_weights(self) -> None:
         for m in self.modules():
             if isinstance(m, nn.Conv2d) or isinstance(m, nn.Linear):
-                torch.nn.init.xavier_uniform_(m.weight)
+                # truncated normal distribution with std 0.1 (truncate > 2 x std)
+                # https://www.tensorflow.org/api_docs/python/tf/random/truncated_normal
+                weights = truncated_normal(list(m.weight.shape), threshold=0.1 * 2)
+                weights = torch.from_numpy(weights)
+                m.weight.data.copy_(weights)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = self.avgpool(self.relu(self.conv1(x)))

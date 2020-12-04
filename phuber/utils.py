@@ -3,6 +3,7 @@ import re
 from typing import Union
 
 from omegaconf import DictConfig, OmegaConf
+from scipy.stats import truncnorm
 
 
 def to_clean_str(s: str) -> str:
@@ -49,3 +50,17 @@ def flatten(d: Union[dict, list], parent_key: str = "", sep: str = ".") -> dict:
     else:
         items.append((parent_key, d))
     return dict(items)
+
+
+def truncated_normal(size, threshold=1):
+    """Samples values from truncated normal distribution centered at 0
+
+    Args:
+        size: shape or amount of samples
+        threshold: cut-off value for distribution
+
+    Returns:
+        numpy array of given size
+
+    """
+    return truncnorm.rvs(-threshold, threshold, size=size)
