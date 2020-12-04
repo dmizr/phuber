@@ -107,6 +107,11 @@ class PHuberCrossEntropy(nn.Module):
     def __init__(self, tau: float = 10) -> None:
         super().__init__()
         self.tau = tau
+
+        # calculate probability and constant term at linearization boundary
+        self.plim = 1 / self.tau
+        self.clim = math.log(self.tau) + 1
+
         self.softmax = nn.Softmax(dim=1)
 
     def forward(self, input: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
@@ -115,8 +120,50 @@ class PHuberCrossEntropy(nn.Module):
         p = p[torch.arange(p.shape[0]), target]
 
         loss = torch.empty_like(p)
-        clip = p <= 1 / self.tau
-        loss[clip] = -self.tau * p[clip] + math.log(self.tau) + 1
+        clip = p <= self.plim
+        loss[clip] = -self.tau * p[clip] + self.clim
         loss[~clip] = -torch.log(p[~clip])
+
+        return torch.mean(loss)
+
+
+class PHuberGeneralizedCrossEntropy(nn.Module):
+    """Computes the partially Huberised (PHuber) generalized cross-entropy loss, from
+    `"Can gradient clipping mitigate label noise?"
+    <https://openreview.net/pdf?id=rklB76EKPr>`_
+
+    Args:
+        q: Box-Cox transformation parameter, :math:`\in (0,1]`
+        tau: clipping threshold, must be > 1
+
+
+    Shape:
+        - Input: the raw, unnormalized score for each class.
+                tensor of size :math:`(minibatch, C)`, with C the number of classes
+        - Target: the labels, tensor of size :math:`(minibatch)`, where each value
+                is :math:`0 \leq targets[i] \leq C-1`
+        - Output: scalar
+    """
+
+    def __init__(self, q: float = 0.7, tau: float = 10) -> None:
+        super().__init__()
+        self.q = q
+        self.tau = tau
+
+        # calculate probability and constant term at linearization boundary
+        self.plim = tau ** (1 / (q-1))
+        self.clim = tau * self.plim + (1 - self.plim ** q) / q
+
+        self.softmax = nn.Softmax(dim=1)
+
+    def forward(self, input: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
+
+        p = self.softmax(input)
+        p = p[torch.arange(p.shape[0]), target]
+
+        loss = torch.empty_like(p)
+        clip = p <= self.plim
+        loss[clip] = -self.tau * p[clip] + self.clim
+        loss[~clip] = (1 - p[~clip] ** self.q) / self.q
 
         return torch.mean(loss)
