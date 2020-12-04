@@ -73,6 +73,7 @@ class UnhingedLoss(nn.Module):
                 is :math:`0 \leq targets[i] \leq C-1`
         - Output: scalar
     """
+
     def __init__(self) -> None:
         super().__init__()
         self.softmax = nn.Softmax(dim=1)
