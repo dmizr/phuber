@@ -44,9 +44,9 @@ class ResNet(torchvision.models.ResNet):
     <https://pytorch.org/docs/stable/_modules/torchvision/models/resnet.html>`_
     to make it suitable for CIFAR 10/100.
 
-    Removes some downsampling to increase the size of the feature maps, in order to
-    make it suitable for classification tasks on datasets with smaller images such as
-    CIFAR 10/100.
+    Removes or replaces some down-sampling layers to increase the size of the feature
+    maps, in order to make it suitable for classification tasks on datasets with smaller
+    images such as CIFAR 10/100.
 
     This network architecture is similar to the one used in
     `"Improved Regularization of Convolutional Neural Networks with Cutout"
