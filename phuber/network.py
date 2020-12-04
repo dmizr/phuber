@@ -20,7 +20,7 @@ class LeNet(nn.Module):
         self.fc2 = nn.Linear(120, 84)
         self.fc3 = nn.Linear(84, 10)
 
-        self.tanh = nn.Tanh()
+        self.relu = nn.ReLU()
         self.avgpool = nn.AvgPool2d(kernel_size=2)
         self._init_weights()
 
@@ -30,11 +30,11 @@ class LeNet(nn.Module):
                 torch.nn.init.xavier_uniform_(m.weight)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        x = self.avgpool(self.tanh(self.conv1(x)))
-        x = self.avgpool(self.tanh(self.conv2(x)))
+        x = self.avgpool(self.relu(self.conv1(x)))
+        x = self.avgpool(self.relu(self.conv2(x)))
         x = torch.flatten(x, start_dim=1)
-        x = self.tanh(self.fc1(x))
-        x = self.tanh(self.fc2(x))
+        x = self.relu(self.fc1(x))
+        x = self.relu(self.fc2(x))
         x = self.fc3(x)
         return x
 
