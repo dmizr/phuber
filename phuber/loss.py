@@ -108,20 +108,20 @@ class PHuberCrossEntropy(nn.Module):
         super().__init__()
         self.tau = tau
 
-        # calculate probability and constant term at linearization boundary
-        self.plim = 1 / self.tau
-        self.clim = math.log(self.tau) + 1
+        # Probability threshold for the clipping
+        self.prob_thresh = 1 / self.tau
+        # Negative of the Fenchel conjugate of base loss at tau
+        self.boundary_term = math.log(self.tau) + 1
 
         self.softmax = nn.Softmax(dim=1)
 
     def forward(self, input: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
-
         p = self.softmax(input)
         p = p[torch.arange(p.shape[0]), target]
 
         loss = torch.empty_like(p)
-        clip = p <= self.plim
-        loss[clip] = -self.tau * p[clip] + self.clim
+        clip = p <= self.prob_thresh
+        loss[clip] = -self.tau * p[clip] + self.boundary_term
         loss[~clip] = -torch.log(p[~clip])
 
         return torch.mean(loss)
@@ -150,20 +150,20 @@ class PHuberGeneralizedCrossEntropy(nn.Module):
         self.q = q
         self.tau = tau
 
-        # calculate probability and constant term at linearization boundary
-        self.plim = tau ** (1 / (q-1))
-        self.clim = tau * self.plim + (1 - self.plim ** q) / q
+        # Probability threshold for the clipping
+        self.prob_thresh = tau ** (1 / (q - 1))
+        # Negative of the Fenchel conjugate of base loss at tau
+        self.boundary_term = tau * self.prob_thresh + (1 - self.prob_thresh ** q) / q
 
         self.softmax = nn.Softmax(dim=1)
 
     def forward(self, input: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
-
         p = self.softmax(input)
         p = p[torch.arange(p.shape[0]), target]
 
         loss = torch.empty_like(p)
-        clip = p <= self.plim
-        loss[clip] = -self.tau * p[clip] + self.clim
+        clip = p <= self.prob_thresh
+        loss[clip] = -self.tau * p[clip] + self.boundary_term
         loss[~clip] = (1 - p[~clip] ** self.q) / self.q
 
         return torch.mean(loss)
