@@ -60,7 +60,7 @@ class GeneralizedCrossEntropy(nn.Module):
         return torch.mean(loss)
 
 
-class UnhingedLoss(nn.Module):
+class Unhinged(nn.Module):
     """Computes the Unhinged (linear) loss, from
     `"Learning with Symmetric Label Noise: The Importance of Being Unhinged"
     <https://arxiv.org/abs/1505.07634>`_
