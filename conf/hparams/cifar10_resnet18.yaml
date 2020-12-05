@@ -5,8 +5,8 @@ model:
   num_classes: 10
 
 hparams:
-  epochs: 400
-  batch_size: 64
+  epochs: 200
+  batch_size: 128
   grad_clip_max_norm: null # change to float to activate
 
   optimizer:
@@ -18,5 +18,5 @@ hparams:
 
   scheduler:
     _target_: torch.optim.lr_scheduler.MultiStepLR
-    milestones: [160, 300, 360]
-    gamma: 0.1
+    milestones: [60, 120, 160]
+    gamma: 0.2

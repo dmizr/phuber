@@ -1,0 +1,3 @@
+# @package _group_
+_target_: phuber.loss.PHuberCrossEntropy
+tau: 10

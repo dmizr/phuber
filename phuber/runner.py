@@ -72,7 +72,7 @@ def train(cfg: DictConfig) -> None:
         val_loader=val_loader,
         scheduler=scheduler,
         update_sched_on_iter=update_sched_on_iter,
-        grad_clip_val=cfg.hparams.grad_clip_val,
+        grad_clip_max_norm=cfg.hparams.grad_clip_max_norm,
         writer=writer,
         save_path=save_path,
         checkpoint_path=checkpoint_path,
