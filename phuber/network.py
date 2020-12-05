@@ -4,6 +4,7 @@ import torch
 import torch.nn as nn
 import torchvision
 from torchvision.models.resnet import BasicBlock, Bottleneck
+
 from phuber.utils import truncated_normal
 
 
