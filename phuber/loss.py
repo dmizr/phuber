@@ -49,11 +49,14 @@ class GeneralizedCrossEntropy(nn.Module):
     def __init__(self, q: float = 0.7) -> None:
         super().__init__()
         self.q = q
+        self.epsilon = 1e-9
         self.softmax = nn.Softmax(dim=1)
 
     def forward(self, input: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
         p = self.softmax(input)
         p = p[torch.arange(p.shape[0]), target]
+        # Avoid undefined gradient for p == 0 by adding epsilon
+        p += self.epsilon
 
         loss = (1 - p ** self.q) / self.q
 
