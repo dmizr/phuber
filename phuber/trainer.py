@@ -5,6 +5,7 @@ from typing import Optional
 
 import torch
 import tqdm
+from torch.cuda.amp import GradScaler, autocast
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 
@@ -82,6 +83,9 @@ class Trainer:
         self.val_loss_metric = LossMetric()
         self.val_acc_metric = AccuracyMetric(k=1)
 
+        # Mixed-precision
+        self.scaler = GradScaler()
+
     def train(self) -> None:
         """Trains the model"""
         self.logger.info("Beginning training")
@@ -116,16 +120,24 @@ class Trainer:
 
             # Forward + backward
             self.optimizer.zero_grad()
-            out = self.model(data)
-            loss = self.loss_fn(out, target)
-            loss.backward()
+            with autocast():
+                out = self.model(data)
+                loss = self.loss_fn(out, target)
+
+            # Backward pass
+            self.scaler.scale(loss).backward()
+
+            # Unscale before gradient clipping
+            self.scaler.unscale_(self.optimizer)
 
             if self.grad_clip_max_norm is not None:
                 torch.nn.utils.clip_grad_norm_(
                     self.model.parameters(), self.grad_clip_max_norm
                 )
 
-            self.optimizer.step()
+            # Update optimizer and scaler
+            self.scaler.step(self.optimizer)
+            self.scaler.update()
 
             # Update scheduler if it is iter-based
             if self.scheduler is not None and self.update_sched_on_iter:
