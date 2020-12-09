@@ -74,6 +74,12 @@ class Trainer:
         self.epochs = epochs
         self.start_epoch = 0
 
+        # Floating-point precision
+        self.mixed_precision = (
+            True if self.device.type == "cuda" and mixed_precision else False
+        )
+        self.scaler = GradScaler() if self.mixed_precision else None
+
         if checkpoint_path:
             self._load_from_checkpoint(checkpoint_path)
 
@@ -83,12 +89,6 @@ class Trainer:
 
         self.val_loss_metric = LossMetric()
         self.val_acc_metric = AccuracyMetric(k=1)
-
-        # Floating-point precision
-        self.mixed_precision = (
-            True if self.device.type == "cuda" and mixed_precision else False
-        )
-        self.scaler = GradScaler() if self.mixed_precision else None
 
     def train(self) -> None:
         """Trains the model"""
