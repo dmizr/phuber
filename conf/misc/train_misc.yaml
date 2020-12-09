@@ -3,6 +3,7 @@ checkpoint: null # add checkpoint path here
 tensorboard: true
 auto_cpu_if_no_gpu: true
 device: cuda:0
+mixed_precision: false
 save: true
 
 dataset:

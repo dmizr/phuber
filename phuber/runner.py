@@ -76,6 +76,7 @@ def train(cfg: DictConfig) -> None:
         writer=writer,
         save_path=save_path,
         checkpoint_path=checkpoint_path,
+        mixed_precision=cfg.mixed_precision,
     )
 
     # Launch training process
