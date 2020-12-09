@@ -18,8 +18,7 @@ def linear_regression(
     loss_fn: Callable,
     grad_fn: Callable,
     gamma: float = 1e-2,
-    max_steps: int = 5000,
-    threshold: float = 1e-2) -> np.ndarray:
+    max_steps: int = 3000) -> np.ndarray:
     """Trains a linear classifier"""
     weights = np.zeros((samples.shape[1],))
     prev = None
@@ -31,12 +30,6 @@ def linear_regression(
         # update the model
         gradient = grad_fn(x, y, weights)
         weights -= gamma * gradient
-
-        # early stop if delta loss is below the threshold
-        loss = loss_fn(y * weights @ x)
-        if prev is not None and np.abs(loss - prev) < threshold:
-            break
-        prev = loss
     return weights
 
 def linear_evaluate(samples: np.ndarray, labels: np.ndarray, weights: np.ndarray) -> float:

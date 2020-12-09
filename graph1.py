@@ -1,3 +1,4 @@
+import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
@@ -39,6 +40,12 @@ if __name__ == "__main__":
                 test_labels,
                 weights)
             accuracies[i].append(acc)
+
+    print(f'Summary of {n_repeat} trials:\n')
+    for i in range(3):
+        print('Loss: ', losses_text[i])
+        print('Acc: ', np.mean(accuracies[i]), '+-', np.var(accuracies[i]))
+        print()
 
     ax = sns.boxplot(data=accuracies)
     ax.set_xticklabels(losses_text, rotation=8)
