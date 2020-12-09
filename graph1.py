@@ -11,7 +11,7 @@ from plots.loss import (
     partially_huberized_gradient
 )
 from plots.dataset import long_servedio
-from plots.linear import linear_regression, linear_evaluate
+from plots.linear import train_linear, evaluate_linear
 
 
 if __name__ == "__main__":
@@ -19,34 +19,49 @@ if __name__ == "__main__":
     losses_text = ['Logistic', 'Huberised', 'Partial Huberised']
     loss_fncs = [logistic_loss, huberized_loss, partially_huberized_loss]
     gradient_fncs = [logistic_gradient, huberized_gradient, partially_huberized_gradient]
-    accuracies = [ [] for i in range(len(losses_text)) ]
+    train_accs, train_lss = [ [] for i in range(3) ], [ [] for i in range(3) ]
+    test_accs, test_lss = [ [] for i in range(3) ], [ [] for i in range(3) ]
 
-    for _ in range(n_repeat):
+    for n in range(n_repeat):
         # generate train and test sets
-        train_samples, train_labels = long_servedio(N=1000)
-        test_samples, test_labels = long_servedio(N=500, corrupt_prob=0)
+        train_samples, train_labels = long_servedio(N=1000, corrupt_prob=0.45, gamma=1./24., var=0.01, noise_seed=n*2)
+        test_samples, test_labels = long_servedio(N=500, corrupt_prob=0, gamma=1./24., var=0.01, noise_seed=n*2+1)
 
         for i in range(3):
             # train linear model
-            weights = linear_regression(
+            weights = train_linear(
                 train_samples,
                 train_labels,
                 loss_fncs[i],
                 gradient_fncs[i])
+
+            # evaluate on train
+            loss, acc = evaluate_linear(
+                train_samples,
+                train_labels,
+                weights,
+                loss_fncs[i])
+            train_lss[i].append(loss)
+            train_accs[i].append(acc)
             
-            # evaluate linear model
-            acc = linear_evaluate(
+            # evaluate on test
+            loss, acc = evaluate_linear(
                 test_samples,
                 test_labels,
-                weights)
-            accuracies[i].append(acc)
+                weights,
+                loss_fncs[i])
+            test_lss[i].append(loss)
+            test_accs[i].append(acc)
 
     print(f'Summary of {n_repeat} trials:\n')
     for i in range(3):
-        print('Loss: ', losses_text[i])
-        print('Acc: ', np.mean(accuracies[i]), '+-', np.var(accuracies[i]))
+        print(losses_text[i])
+        print('Train Loss: ', np.mean(train_lss[i]), '+-', np.var(train_lss[i]))
+        print('Train Acc: ', np.mean(train_accs[i]), '+-', np.var(train_accs[i]))
+        print('Test Loss: ', np.mean(test_lss[i]), '+-', np.var(test_lss[i]))
+        print('Test Acc: ', np.mean(test_accs[i]), '+-', np.var(test_accs[i]))
         print()
 
-    ax = sns.boxplot(data=accuracies)
+    ax = sns.boxplot(data=test_accs)
     ax.set_xticklabels(losses_text, rotation=8)
     plt.show()
