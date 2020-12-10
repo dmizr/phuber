@@ -10,12 +10,12 @@ from plots.loss import (
     huberized_gradient,
     partially_huberized_gradient
 )
-from plots.dataset import long_servedio
+from plots.dataset import long_servedio, show_data
 from plots.linear import train_linear, evaluate_linear
 
 
 if __name__ == "__main__":
-    n_repeat = 500
+    n_repeat = 100
     losses_text = ['Logistic', 'Huberised', 'Partial Huberised']
     loss_fncs = [logistic_loss, huberized_loss, partially_huberized_loss]
     gradient_fncs = [logistic_gradient, huberized_gradient, partially_huberized_gradient]
@@ -24,16 +24,15 @@ if __name__ == "__main__":
 
     for n in range(n_repeat):
         # generate train and test sets
-        train_samples, train_labels = long_servedio(N=1000, corrupt_prob=0.45, gamma=1./24., var=0.01, noise_seed=n*2)
-        test_samples, test_labels = long_servedio(N=500, corrupt_prob=0, gamma=1./24., var=0.01, noise_seed=n*2+1)
+        train_samples, train_labels = long_servedio(N=1000, corrupt_prob=0.2, gamma=1./24., var=0.0, noise_seed=None)
+        test_samples, test_labels = long_servedio(N=500, corrupt_prob=0, gamma=1./24., var=0.0, noise_seed=None)
 
         for i in range(3):
             # train linear model
             weights = train_linear(
                 train_samples,
                 train_labels,
-                loss_fncs[i],
-                gradient_fncs[i])
+                loss_fncs[i])
 
             # evaluate on train
             loss, acc = evaluate_linear(
@@ -65,3 +64,4 @@ if __name__ == "__main__":
     ax = sns.boxplot(data=test_accs)
     ax.set_xticklabels(losses_text, rotation=8)
     plt.show()
+

@@ -12,7 +12,7 @@ def logistic_loss(z: np.ndarray) -> np.ndarray:
     Returns:
         logistic loss
     """
-
+    z = np.clip(z, -500, 500)
     return np.log(1 + np.exp(-z))
 
 def huberized_loss(z: np.ndarray, tau: float = 0.1) -> np.ndarray:
@@ -61,7 +61,7 @@ def logistic_gradient(x: np.ndarray, y: np.ndarray, w: np.ndarray) -> np.ndarray
     y, z = y[:, np.newaxis], z[:, np.newaxis]
     return (-z * y) * x
     
-def huberized_gradient(x: np.ndarray, y: np.ndarray, w: np.ndarray, tau: float = 0.1) -> np.ndarray:
+def huberized_gradient(x: np.ndarray, y: np.ndarray, w: np.ndarray, tau: float = 1) -> np.ndarray:
     """Returns the gradient of huberized loss w.r.t weights
     
     Args:
@@ -80,7 +80,7 @@ def huberized_gradient(x: np.ndarray, y: np.ndarray, w: np.ndarray, tau: float =
         (-tau * y) * x,
         (-z * y) * x)
     
-def partially_huberized_gradient(x: np.ndarray, y: np.ndarray, w: np.ndarray, tau: float = 2.0) -> np.ndarray:
+def partially_huberized_gradient(x: np.ndarray, y: np.ndarray, w: np.ndarray, tau: float = 2) -> np.ndarray:
     """Returns the gradient of partially huberized loss w.r.t weights
     
     Args:

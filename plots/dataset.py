@@ -42,10 +42,21 @@ def long_servedio(
         m = means[np.random.choice(np.arange(len(means)), p=weights)]
         x = np.random.multivariate_normal(m, cov)
 
-        flip = np.random.rand() < corrupt_prob
-        label = 1 if (x[0] >= 0) ^ flip else -1
+        label = 1 if x[0] >= 0 else -1
+        flip = np.random.choice([-1, 1], p=[1 - corrupt_prob, corrupt_prob])
+        label = label * flip
+
+        # flip = np.random.rand() < corrupt_prob
+        # label = 1 if (x[0] >= 0) ^ flip else -1
 
         samples.append(x)
         labels.append(label)
-    
+
     return np.array(samples), np.array(labels)
+
+
+def show_data(samples, labels):
+    import matplotlib.pyplot as plt
+    plt.scatter(samples[labels==-1, 0], samples[labels==-1, 1], s=0.1, c="blue")
+    plt.scatter(samples[labels==1, 0], samples[labels==1, 1], s=0.1, c="red")
+    plt.show()

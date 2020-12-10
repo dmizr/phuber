@@ -1,22 +1,30 @@
 from typing import Callable, Tuple
 import numpy as np
-import scipy.optimize as optimize
+
+from plots.utils import sigmoid
 
 def train_linear(
     samples: np.ndarray,
     labels: np.ndarray,
-    loss_fn: Callable) -> np.ndarray:
+    loss_fn: Callable,
+    grad_fn: Callable,
+    gamma: float = 0.1,
+    max_steps: int = 1000) -> np.ndarray:
     """Trains a linear classifier"""
     weights = np.zeros((samples.shape[1],))
+    prev = None
+    for i in range(max_steps):
+        # sample from dataset
+        index = np.random.choice(samples.shape[0])
+        x, y = samples[index:index+1], labels[index:index+1]
+        
+        # update the model
+        gradient = grad_fn(x, y, weights)
+        weights -= gamma * np.mean(gradient, axis=0)
 
-    def fun(weights, samples, labels, loss_fn):
-        z = samples @ weights
-        loss = np.mean(loss_fn(z * labels))
-        return loss
-
-    opt_result = optimize.minimize(fun, weights, (samples, labels, loss_fn), method="SLSQP")
-
-    return opt_result['x']
+        if i % 4000 == 0:
+            gamma *= 0.5
+    return weights
 
 def evaluate_linear(
     samples: np.ndarray,
