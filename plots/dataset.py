@@ -1,12 +1,15 @@
 from typing import Optional, Tuple
+
 import numpy as np
+
 
 def long_servedio(
     N: int = 1000,
-    gamma: float = 1./24.,
+    gamma: float = 1.0 / 24.0,
     var: float = 0.01,
     corrupt_prob: float = 0.45,
-    noise_seed: Optional[int] = None) -> Tuple[np.ndarray, np.ndarray]:
+    noise_seed: Optional[int] = None,
+) -> Tuple[np.ndarray, np.ndarray]:
     """Generates 2-dimensional 6-atoms Long & Servedio dataset, from`
     "Random Classification Noise Defeats All Convex Potential Boosters"
     <http://www.cs.columbia.edu/~rocco/Public/icml08-cameraready.pdf>`_
@@ -26,16 +29,18 @@ def long_servedio(
     if noise_seed is not None:
         np.random.seed(noise_seed)
 
-    means = np.array([
-        [1,0],
-        [-1,0],
-        [gamma, 5*gamma],
-        [-gamma, -5*gamma],
-        [gamma, -gamma],
-        [-gamma, gamma]
-    ])
+    means = np.array(
+        [
+            [1, 0],
+            [-1, 0],
+            [gamma, 5 * gamma],
+            [-gamma, -5 * gamma],
+            [gamma, -gamma],
+            [-gamma, gamma],
+        ]
+    )
     cov = var * np.eye(2)
-    weights = np.array([1., 1., 1., 1., 2., 2.]) / 8.
+    weights = np.array([1.0, 1.0, 1.0, 1.0, 2.0, 2.0]) / 8.0
 
     samples, labels = [], []
     for i in range(N):
@@ -53,10 +58,3 @@ def long_servedio(
         labels.append(label)
 
     return np.array(samples), np.array(labels)
-
-
-def show_data(samples, labels):
-    import matplotlib.pyplot as plt
-    plt.scatter(samples[labels==-1, 0], samples[labels==-1, 1], s=0.1, c="blue")
-    plt.scatter(samples[labels==1, 0], samples[labels==1, 1], s=0.1, c="red")
-    plt.show()

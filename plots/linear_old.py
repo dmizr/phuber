@@ -1,7 +1,9 @@
 from typing import Callable, Tuple
+
 import numpy as np
 
 from plots.utils import sigmoid
+
 
 def train_linear(
     samples: np.ndarray,
@@ -9,16 +11,17 @@ def train_linear(
     loss_fn: Callable,
     grad_fn: Callable,
     gamma: float = 0.1,
-    max_steps: int = 1000) -> np.ndarray:
+    max_steps: int = 1000,
+) -> np.ndarray:
     """Trains a linear classifier"""
     weights = np.zeros((samples.shape[1],))
     prev = None
     for i in range(max_steps):
         # sample from dataset
         index = np.random.choice(samples.shape[0])
-        x, y = samples[index:index+1], labels[index:index+1]
-        
-        # update the model
+        x, y = samples[index : index + 1], labels[index : index + 1]
+
+        #  update the model
         gradient = grad_fn(x, y, weights)
         weights -= gamma * np.mean(gradient, axis=0)
 
@@ -26,11 +29,10 @@ def train_linear(
             gamma *= 0.5
     return weights
 
+
 def evaluate_linear(
-    samples: np.ndarray,
-    labels: np.ndarray,
-    weights: np.ndarray,
-    loss_fn: Callable) -> Tuple[float, float]:
+    samples: np.ndarray, labels: np.ndarray, weights: np.ndarray, loss_fn: Callable
+) -> Tuple[float, float]:
     """Evaluates the given linear classifier"""
     z = samples @ weights
     preds = np.ones_like(z)
