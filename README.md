@@ -18,7 +18,8 @@ For the experiments, the following losses are also implemented:
 - [Training](#training)
 - [Evaluation](#evaluation)
 - [Results](#results)
-- [Pretrained models](#pretrained)
+- [Pretrained models](#pretrained-models)
+- [Project structure](#project-structure)
 - [References](#references)
 
 
@@ -30,24 +31,24 @@ pip install -r requirements.txt
 
 ## Training
 
-This project uses [Hydra](https://hydra.cc/) to configure experiments. Configurations can be overriden through config files (in the `conf/` folder) and the command line. For more information, check out the [Hydra documentation](https://hydra.cc/docs/intro/).
+This project uses [Hydra](https://hydra.cc/) to configure experiments. Configurations can be overriden through config files (in `conf/`) and the command line. For more information, check out the [Hydra documentation](https://hydra.cc/docs/intro/).
 
 With Hydra, configurations can be fully customized directly though the command line. To find out more about the configuration options, run:
 ```
 python3 train.py --help
 ```
 
-To run the experiments from the paper (72 different configurations), only 5 options need to be overriden.
+To run the experiments from the paper (72 different configurations), only 5 arguments need to be provided.
 These are:
 - the dataset: `mnist, cifar10, cifar100` (e.g. `dataset=cifar100`)
 - the model: `lenet, resnet50` (e.g. `model=resnet50`)
 - the loss: `ce, gce, linear, phuber_ce, phuber_gce` (e.g. `loss=phuber_ce`)
 - the label corruption probability ρ of the training set (e.g. `dataset.train.corrupt_prob=0.2`)
-- the gradient clipping max norm (not used by default) (e.g. `hparams.grad_clip_max_norm=0.1`)
+- the gradient clipping max norm (gradient clipping is not used by default) (e.g. `hparams.grad_clip_max_norm=0.1`)
 
-**Note:** When choosing a dataset and model, the hyper-parameters (e.g. number of epochs, batch size, optimizer, learning rate scheduler, ...) are automatically modified to use the configuration described by the authors in their experiments. If needed, these hyper-parameters can also be overriden through command line arguments.
+**Note:** When choosing a dataset and model, the hyper-parameters (e.g. number of epochs, batch size, optimizer, learning rate scheduler, ...) are automatically modified to the configuration described by the authors in their experiments. If needed, these hyper-parameters can also be overriden through command line arguments.
 
-#### Examples
+### Examples
 
 Training LeNet on MNIST using cross-entropy loss and no label corruption:
 ```
@@ -60,7 +61,7 @@ Training a ResNet-50 on CIFAR-10 using the partially Huberised cross-entropy los
 python3 train.py dataset=cifar10 model=resnet50 loss=phuber_ce loss.tau=2 dataset.train.corrupt_prob=0.2
 ```
 
-Training a ResNet-50 on CIFAR-100 using the Generalized Cross Entropy loss (GCE), label corruption probability ρ of 0.6, and with [Mixed Precision](https://pytorch.org/blog/accelerating-training-on-nvidia-gpus-with-pytorch-automatic-mixed-precision/):
+Training a ResNet-50 on CIFAR-100 using the Generalized Cross Entropy loss (GCE) and label corruption probability ρ of 0.6, with [mixed precision](https://pytorch.org/blog/accelerating-training-on-nvidia-gpus-with-pytorch-automatic-mixed-precision/):
 
 ```
 python3 train.py dataset=cifar100 model=resnet50 loss=gce dataset.train.corrupt_prob=0.6 mixed_precision=true
@@ -72,7 +73,23 @@ python3 train.py dataset=cifar100 model=resnet50 loss=gce dataset.train.corrupt_
 python3 train.py --multirun dataset=mnist model=lenet loss=ce dataset.train.corrupt_prob=0.0,0.2,0.4,0.6
 ```
 
-#### Run metrics and saved models
-By default, run metrics are logged to [TensorBoard](https://www.tensorflow.org/tensorboard). In addition, the saved models, training parameters and training log can be found in the run's directory, in the `outputs/` folder.
+### Run metrics and saved models
+By default, run metrics are logged to [TensorBoard](https://www.tensorflow.org/tensorboard). In addition, the saved models, training parameters and training log can be found in the run's directory, in `outputs/`.
 
 ## Evaluation
+
+To evaluate a trained model using `eval.py`, you need to provide:
+- the dataset: `mnist, cifar10, cifar100` (e.g. `dataset=cifar100`)
+- the model: `lenet, resnet50` (e.g. `model=resnet50`)
+- path to the trained model weights (e.g. `checkpoint=path/to/model.pt`)
+
+For example, to evaluate a LeNet model trained on MNIST saved in `models/lenet.pt`, run:
+```
+python3 eval.py dataset=mnist model=lenet checkpoint=models/lenet.pt
+```
+
+By default, trained models are only evaluated on the test set. This can be modified by overriding the `dataset.train.use`, `dataset.val.use` and `dataset.test.use` arguments.
+
+
+
+To find out more about configuration options for evaluation, use the `--help` flag.
