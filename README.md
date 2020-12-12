@@ -13,6 +13,7 @@ For the experiments, the following losses are also implemented:
 - [Unhinged loss](https://arxiv.org/abs/1505.07634v1) (van Rooyen et al., NeurIPS 2015)
 - [Generalized Cross Entropy loss](https://arxiv.org/abs/1805.07836v4) (Zhang & Sabuncu, NeurIPS 2018)
 
+
 ## Table of Contents
 - [Dependencies](#dependencies)
 - [Training](#training)
@@ -29,24 +30,24 @@ This project requires Python >= 3.8. Dependencies can be installed with:
 pip install -r requirements.txt
 ```
 
+
 ## Training
 
-This project uses [Hydra](https://hydra.cc/) to configure experiments. Configurations can be overriden through config files (in `conf/`) and the command line. For more information, check out the [Hydra documentation](https://hydra.cc/docs/intro/).
+This project uses [Hydra](https://hydra.cc/) to configure experiments. Configurations can be overridden through config files (in `conf/`) and the command line. For more information, check out the [Hydra documentation](https://hydra.cc/docs/intro/).
 
 With Hydra, configurations can be fully customized directly though the command line. To find out more about the configuration options, run:
 ```
 python3 train.py --help
 ```
 
-To run the experiments from the paper (72 different configurations), only 5 arguments need to be provided.
-These are:
+To run the experiments from the paper (72 different configurations), only 5 arguments need to be provided:
 - the dataset: `mnist, cifar10, cifar100` (e.g. `dataset=cifar100`)
 - the model: `lenet, resnet50` (e.g. `model=resnet50`)
 - the loss: `ce, gce, linear, phuber_ce, phuber_gce` (e.g. `loss=phuber_ce`)
 - the label corruption probability ρ of the training set (e.g. `dataset.train.corrupt_prob=0.2`)
 - the gradient clipping max norm (gradient clipping is not used by default) (e.g. `hparams.grad_clip_max_norm=0.1`)
 
-**Note:** When choosing a dataset and model, the hyper-parameters (e.g. number of epochs, batch size, optimizer, learning rate scheduler, ...) are automatically modified to the configuration described by the authors in their experiments. If needed, these hyper-parameters can also be overriden through command line arguments.
+**Note:** When choosing a dataset and model, the hyper-parameters (e.g. number of epochs, batch size, optimizer, learning rate scheduler, ...) are automatically changed to those used by the authors in their experiments. If needed, these hyper-parameters can also be overridden through command line arguments.
 
 ### Examples
 
@@ -76,6 +77,7 @@ python3 train.py --multirun dataset=mnist model=lenet loss=ce dataset.train.corr
 ### Run metrics and saved models
 By default, run metrics are logged to [TensorBoard](https://www.tensorflow.org/tensorboard). In addition, the saved models, training parameters and training log can be found in the run's directory, in `outputs/`.
 
+
 ## Evaluation
 
 To evaluate a trained model using `eval.py`, you need to provide:
@@ -90,6 +92,15 @@ python3 eval.py dataset=mnist model=lenet checkpoint=models/lenet.pt
 
 By default, trained models are only evaluated on the test set. This can be modified by overriding the `dataset.train.use`, `dataset.val.use` and `dataset.test.use` arguments.
 
-
-
 To find out more about configuration options for evaluation, use the `--help` flag.
+
+## Results
+
+
+## Pretrained models
+
+
+## Project structure
+
+
+## References
