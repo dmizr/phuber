@@ -92,7 +92,7 @@ python3 eval.py dataset=mnist model=lenet checkpoint=models/lenet.pt
 
 By default, trained models are only evaluated on the test set. This can be modified by overriding the `dataset.train.use`, `dataset.val.use` and `dataset.test.use` arguments.
 
-To find out more about configuration options for evaluation, use the `--help` flag.
+To find out more about the configuration options for evaluation, use the `--help` flag.
 
 ## Results
 
@@ -104,3 +104,8 @@ To find out more about configuration options for evaluation, use the `--help` fl
 
 
 ## References
+- Menon et al., ["Can gradient clipping mitigate label noise?""](https://openreview.net/pdf?id=rklB76EKPr), ICLR 2020
+- van Rooyen et al., ["Learning with Symmetric Label Noise: The Importance of Being Unhinged"](https://arxiv.org/abs/1505.07634v1), NeurIPS 2015
+- Zhang & Sabuncu, ["Generalized Cross Entropy Loss for Training Deep Neural Networks with Noisy Labels"](https://arxiv.org/abs/1805.07836), NeurIPS 2018
+- LeCun et al., ["Gradient-based learning applied to document recognition"](http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf), IEEE 1998
+- He et al., ["Deep Residual Learning for Image Recognition"](https://arxiv.org/abs/1512.03385), CVPR 2016
