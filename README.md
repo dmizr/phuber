@@ -37,7 +37,7 @@ With Hydra, configurations can be fully customized directly though the command l
 python3 train.py --help
 ```
 
-To run the experiments (72 different configurations) from the paper, only 5 options need to be overriden.
+To run the experiments from the paper (72 different configurations), only 5 options need to be overriden.
 These are:
 - the dataset: `mnist, cifar10, cifar100` (e.g. `dataset=cifar100`)
 - the model: `lenet, resnet50` (e.g. `model=resnet50`)
