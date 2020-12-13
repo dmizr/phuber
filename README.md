@@ -99,6 +99,10 @@ To find out more about the configuration options for evaluation, use the `--help
 
 ## Pretrained models
 
+For each configuration, the models obtained during the first trial are available on Google Drive:
+- [Pretrained LeNet on MNIST](https://drive.google.com/drive/folders/1NXCTcPFFh-eeg21OZeXq1pFQfcxZPgbi?usp=sharing)
+- [Pretrained ResNet-50 on CIFAR-100](https://drive.google.com/drive/folders/1Aas0q2LuaYr1ljHJXKTT4tIiwP0OzD3i?usp=sharing)
+
 
 ## Project structure
 
