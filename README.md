@@ -97,7 +97,7 @@ To find out more about the configuration options for evaluation, use the `--help
 
 ## Results
 
-#### MNIST
+#### MNIST with LeNet-5
 
 | Loss function   | ρ = 0.0   | ρ = 0.2   | ρ = 0.4   | ρ = 0.6   |
 |:----------------|:----------|:----------|:----------|:----------|
@@ -108,7 +108,7 @@ To find out more about the configuration options for evaluation, use the `--help
 | PHuber-CE τ=10  | 99.0±0.0  | 98.8±0.1  | 98.5±0.1  | 97.6±0.0  |
 | PHuber-GCE τ=10 | 98.9±0.0  | 98.7±0.0  | 98.4±0.0  | 98.0±0.0  |
 
-
+![mnist_results](docs/mnist_results.png)
 
 ## Pretrained models
 
