@@ -20,6 +20,7 @@ For the experiments, the following losses are also implemented:
 - [Evaluation](#evaluation)
 - [Results](#results)
 - [Pretrained models](#pretrained-models)
+- [Synthetic experiments](#synthetic-experiments)
 - [Project structure](#project-structure)
 - [References](#references)
 
@@ -40,7 +41,7 @@ With Hydra, configurations can be fully customized directly though the command l
 python3 train.py --help
 ```
 
-To run the experiments from the paper (72 different configurations), only 5 arguments need to be provided:
+To run the experiments from the paper based on real-world datasets  (72 different configurations), only 5 arguments need to be provided:
 - the dataset: `mnist, cifar10, cifar100` (e.g. `dataset=cifar100`)
 - the model: `lenet, resnet50` (e.g. `model=resnet50`)
 - the loss: `ce, gce, linear, phuber_ce, phuber_gce` (e.g. `loss=phuber_ce`)
@@ -85,7 +86,7 @@ To evaluate a trained model using `eval.py`, you need to provide:
 - the model: `lenet, resnet50` (e.g. `model=resnet50`)
 - path to the trained model weights (e.g. `checkpoint=path/to/model.pt`)
 
-For example, to evaluate a LeNet model trained on MNIST saved in `models/lenet.pt`, run:
+For example, to evaluate a LeNet model trained on MNIST saved as `models/lenet.pt`, run:
 ```
 python3 eval.py dataset=mnist model=lenet checkpoint=models/lenet.pt
 ```
@@ -100,9 +101,21 @@ To find out more about the configuration options for evaluation, use the `--help
 ## Pretrained models
 
 For each configuration, the models obtained during the first trial are available on Google Drive:
-- [Pretrained LeNet on MNIST](https://drive.google.com/drive/folders/1NXCTcPFFh-eeg21OZeXq1pFQfcxZPgbi?usp=sharing)
+- [Pretrained LeNet on MNIST](https://drive.google.com/drive/folders/1_sVDLPUqmIyRPMYD0tNTOR3V1PJATIJD?usp=sharing)
 - [Pretrained ResNet-50 on CIFAR-100](https://drive.google.com/drive/folders/1Aas0q2LuaYr1ljHJXKTT4tIiwP0OzD3i?usp=sharing)
 
+
+## Synthetic experiments
+
+This repo also reproduces the experiments from the paper based on synthetic datasets. These experiments use simple linear models, which are implemented using NumPy and SciPy.  
+To reproduce the first synthetic experiment (fig. 2a from the paper), run:
+```
+python3 synthetic_1.py
+```
+To reproduce the second synthetic experiment (fig. 2b from the paper), run:
+```
+python3 synthetic_2.py
+```
 
 ## Project structure
 
