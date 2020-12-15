@@ -18,7 +18,14 @@ def inverse_sigmoid(z: Union[np.ndarray, float]) -> np.ndarray:
     return np.log(z / (1 - z))
 
 
-def plot_boundaries(w: np.ndarray, samples: np.ndarray, labels: np.ndarray) -> None:
+def plot_boundaries(
+    w: np.ndarray,
+    samples: np.ndarray,
+    labels: np.ndarray,
+    show=True,
+    save=False,
+    save_name="boundaries.png",
+) -> None:
     """Plots decision boundaries of a linear model"""
     # Plot when normalized
     fig = plt.figure(figsize=(10, 8))
@@ -32,8 +39,8 @@ def plot_boundaries(w: np.ndarray, samples: np.ndarray, labels: np.ndarray) -> N
     x1_diff = x1_max - x1_min
 
     xx, yy = np.mgrid[
-        x0_min - x0_diff / 10: x0_max + x0_diff / 10 + eps: x0_diff / 400,
-        x1_min - x1_diff / 10: x1_max + x1_diff / 10 + eps: x1_diff / 400,
+        x0_min - x0_diff / 10 : x0_max + x0_diff / 10 + eps : x0_diff / 400,
+        x1_min - x1_diff / 10 : x1_max + x1_diff / 10 + eps : x1_diff / 400,
     ]
     grid = np.c_[xx.ravel(), yy.ravel()]
     out = (grid @ w).reshape(xx.shape)
@@ -51,11 +58,26 @@ def plot_boundaries(w: np.ndarray, samples: np.ndarray, labels: np.ndarray) -> N
     )
 
     # End of plotting decision boundary
-    plt.show()
+    if save:
+        plt.savefig(save_name)
+
+    if show:
+        plt.show()
 
 
-def plot_data(samples: np.ndarray, labels: np.ndarray) -> None:
+def plot_data(
+    samples: np.ndarray,
+    labels: np.ndarray,
+    show=True,
+    save=False,
+    save_name="data.png",
+) -> None:
     """Plots data points"""
     plt.scatter(samples[labels == -1, 0], samples[labels == -1, 1], s=0.1, c="blue")
     plt.scatter(samples[labels == 1, 0], samples[labels == 1, 1], s=0.1, c="red")
-    plt.show()
+    # End of plotting decision boundary
+    if save:
+        plt.savefig(save_name)
+
+    if show:
+        plt.show()

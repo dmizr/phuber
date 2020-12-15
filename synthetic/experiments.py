@@ -46,7 +46,7 @@ def long_servedio_experiment(cfg: DictConfig) -> None:
         )
         test_samples, test_labels = long_servedio(
             N=cfg.n_test,
-            corrupt_prob=cfg.corrupt_prob,
+            corrupt_prob=0.0,
             gamma=cfg.gamma,
             var=cfg.var,
             noise_seed=cfg.seed + 1 if cfg.seed else None,
@@ -72,8 +72,15 @@ def long_servedio_experiment(cfg: DictConfig) -> None:
                 raise ValueError("Only slsqp or sgd is supported for this experiment!")
 
             # Plot boundaries optionally
-            if cfg.plot:
-                plot_boundaries(weights, train_samples, train_labels)
+            if cfg.plot_boundaries:
+                plot_boundaries(
+                    weights,
+                    train_samples,
+                    train_labels,
+                    show=cfg.show_fig,
+                    save=cfg.save_fig,
+                    save_name=f"boundaries_{losses_text[i]}.png",
+                )
 
             # evaluate on train
             loss, acc = evaluate_linear(
@@ -101,7 +108,6 @@ def long_servedio_experiment(cfg: DictConfig) -> None:
 
     # Plot results
     ax = sns.boxplot(data=test_accs)
-    ax.set_ylim((None, 1))
     ax.set_xticklabels(losses_text, rotation=8)
 
     if cfg.save_fig:
