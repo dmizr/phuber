@@ -30,14 +30,19 @@ def long_servedio_experiment(cfg: DictConfig) -> None:
 
     # prepare losses and gradients
     losses_text = ["Logistic", "Huberised", "Partial Huberised"]
-    loss_fns = [logistic_loss, huberised_loss, partially_huberised_loss]
-    grad_fns = [
-        logistic_gradient,
-        huberised_gradient,
-        partially_huberised_gradient,
+    loss_fns = [
+        logistic_loss,
+        lambda x: huberised_loss(x, tau=cfg.huber_tau),
+        lambda x: partially_huberised_loss(x, tau=cfg.phuber_tau),
     ]
 
-    # containers for results
+    grad_fns = [
+        logistic_gradient,
+        lambda x, y, w: huberised_gradient(x, y, w, tau=cfg.huber_tau),
+        lambda x, y, w: partially_huberised_gradient(x, y, w, cfg.phuber_tau),
+    ]
+
+    # Containers for results
     train_accs, train_losses = [[] for _ in range(3)], [[] for _ in range(3)]
     test_accs, test_losses = [[] for _ in range(3)], [[] for _ in range(3)]
 
@@ -71,8 +76,10 @@ def long_servedio_experiment(cfg: DictConfig) -> None:
                     labels=train_labels,
                     loss_fn=loss_fns[i],
                     grad_fn=grad_fns[i],
-                    lr=cfg.lr if cfg.lr is None else 0.01,
-                    num_steps=cfg.num_steps if cfg.num_steps is None else 3000,
+                    lr=cfg.lr if cfg.get("lr", None) is not None else 0.2,
+                    num_steps=cfg.num_steps
+                    if cfg.get("num_steps", None) is not None
+                    else 20_000,
                 )
             else:
                 raise ValueError("Only slsqp or sgd is supported for this experiment!")
@@ -141,21 +148,29 @@ def outliers_experiment(cfg: DictConfig):
         )
 
         losses["huber_inliers"].append(
-            np.mean(huberised_loss(inlier_labels * inlier_feats * i))
+            np.mean(huberised_loss(inlier_labels * inlier_feats * i, tau=cfg.huber_tau))
         )
 
         losses["phuber_inliers"].append(
-            np.mean(partially_huberised_loss(inlier_labels * inlier_feats * i))
+            np.mean(
+                partially_huberised_loss(
+                    inlier_labels * inlier_feats * i, tau=cfg.phuber_tau
+                )
+            )
         )
 
         # Inliers + outliers
         losses["logistic_all"].append(
             np.mean(logistic_loss(all_labels * all_feats * i))
         )
-        losses["huber_all"].append(np.mean(huberised_loss(all_labels * all_feats * i)))
+        losses["huber_all"].append(
+            np.mean(huberised_loss(all_labels * all_feats * i, tau=cfg.huber_tau))
+        )
 
         losses["phuber_all"].append(
-            np.mean(partially_huberised_loss(all_labels * all_feats * i))
+            np.mean(
+                partially_huberised_loss(all_labels * all_feats * i, tau=cfg.phuber_tau)
+            )
         )
 
     outliers_lineplot(thetas, losses, show=cfg.show_fig, save=cfg.save_fig)

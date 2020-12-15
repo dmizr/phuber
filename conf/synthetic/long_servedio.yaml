@@ -6,8 +6,11 @@ defaults:
 n_repeat: 500
 n_train: 1000
 n_test: 500
+
+huber_tau: 0.26 # ~ sigmoid(-1)
+phuber_tau: 1.36 # ~ 1 + exp(-1)
 corrupt_prob: 0.2
-gamma: 0.0417 # roughly 1/24
+gamma: 0.0417 # ~ 1/24
 var: 0.0001
 seed: null
 method: slsqp

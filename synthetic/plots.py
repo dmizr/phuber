@@ -80,7 +80,7 @@ def long_servedio_boxplot(
     """Displays the boxplot from the Long & Servedio synthetic experiment"""
 
     sns.set_context(seaborn_context)
-    sns.set_style("notebook")
+    sns.set_style("darkgrid")
 
     fig, ax = plt.subplots()
     ax = sns.boxplot(data=test_accs, showfliers=False, ax=ax)
