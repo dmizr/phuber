@@ -1,8 +1,6 @@
 import logging
 
-import matplotlib.pyplot as plt
 import numpy as np
-import seaborn as sns
 from omegaconf import DictConfig
 from tqdm import tqdm
 
@@ -16,7 +14,7 @@ from synthetic.loss import (
     partially_huberised_gradient,
     partially_huberised_loss,
 )
-from synthetic.utils import plot_boundaries
+from synthetic.plots import boxplot_long_servedio, plot_boundaries
 
 
 def long_servedio_experiment(cfg: DictConfig) -> None:
@@ -106,12 +104,5 @@ def long_servedio_experiment(cfg: DictConfig) -> None:
         logger.info(f"Test Acc:  {np.mean(test_accs[i])} +- {np.var(test_accs[i])}")
         print()
 
-    # Plot results
-    ax = sns.boxplot(data=test_accs)
-    ax.set_xticklabels(losses_text, rotation=8)
-
-    if cfg.save_fig:
-        plt.savefig("result.png")
-
-    if cfg.show_fig:
-        plt.show()
+    # Display boxplot from paper
+    boxplot_long_servedio(test_accs, losses_text, show=cfg.show_fig, save=cfg.save_fig)

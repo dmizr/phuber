@@ -30,7 +30,8 @@ def train_linear_sgd(
     for i in range(num_steps):
         # sample from dataset
         index = np.random.choice(samples.shape[0])
-        x, y = samples[index : index + 1], labels[index : index + 1]
+        x = samples[index : index + 1]
+        y = labels[index : index + 1]
 
         #  update the model
         gradient = grad_fn(x, y, weights)
