@@ -29,6 +29,7 @@ def long_servedio(
     if noise_seed is not None:
         np.random.seed(noise_seed)
 
+    # means of the atoms (following Long & Servedio)
     means = np.array(
         [
             [1, 0],
@@ -39,21 +40,28 @@ def long_servedio(
             [-gamma, gamma],
         ]
     )
+    # each atom is isotropic gaussian
     cov = var * np.eye(2)
+
+    # weights of the atoms (following Long & Servedio)
     weights = np.array([1.0, 1.0, 1.0, 1.0, 2.0, 2.0]) / 8.0
 
     samples, labels = [], []
     for i in range(N):
+        # choose the atom
         m = means[np.random.choice(np.arange(len(means)), p=weights)]
+
+        # sample from the atom
         x = np.random.multivariate_normal(m, cov)
 
+        #  extract label x > 0
         label = 1 if x[0] >= 0 else -1
+
+        # randomly flip with corrupt probability
         flip = np.random.choice([-1, 1], p=[1 - corrupt_prob, corrupt_prob])
         label = label * flip
 
-        # flip = np.random.rand() < corrupt_prob
-        # label = 1 if (x[0] >= 0) ^ flip else -1
-
+        # store sample and label
         samples.append(x)
         labels.append(label)
 

@@ -3,7 +3,7 @@ import numpy as np
 import seaborn as sns
 
 from plots.dataset import long_servedio
-from plots.linear import evaluate_linear, train_linear
+from plots.linear import evaluate_linear, train_linear_slsqp
 from plots.loss import (
     huberized_gradient,
     huberized_loss,
@@ -37,10 +37,10 @@ if __name__ == "__main__":
 
         for i in range(3):
             # train linear model
-            weights = train_linear(train_samples, train_labels, loss_fncs[i])
+            weights = train_linear_slsqp(train_samples, train_labels, loss_fncs[i])
 
             # Plot boundaries optionally
-            # plot_boundaries(weights, train_samples, train_labels)
+            plot_boundaries(weights, train_samples, train_labels)
 
             # evaluate on train
             loss, acc = evaluate_linear(
