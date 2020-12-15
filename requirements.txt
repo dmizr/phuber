@@ -1,6 +1,6 @@
 numpy
 scipy
-torch
+torch>=1.7
 torchvision
 tensorboard
 hydra-core
