@@ -87,7 +87,7 @@ def logistic_gradient(x: np.ndarray, y: np.ndarray, w: np.ndarray) -> np.ndarray
 
 
 def huberised_gradient(
-    x: np.ndarray, y: np.ndarray, w: np.ndarray, tau: float = 1
+    x: np.ndarray, y: np.ndarray, w: np.ndarray, tau: float = 0.1
 ) -> np.ndarray:
     """Returns the gradient of huberized loss for a linear scorer.
 
