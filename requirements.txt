@@ -5,3 +5,5 @@ torchvision
 tensorboard
 hydra-core
 tqdm
+matplotlib
+seaborn

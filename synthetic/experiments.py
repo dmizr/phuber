@@ -110,7 +110,6 @@ def long_servedio_experiment(cfg: DictConfig) -> None:
         logger.info(f"Train Acc: {np.mean(train_accs[i])} +-  {np.var(train_accs[i])}")
         logger.info(f"Test Loss: {np.mean(test_losses[i])} +- {np.var(test_losses[i])}")
         logger.info(f"Test Acc:  {np.mean(test_accs[i])} +- {np.var(test_accs[i])}")
-        print()
 
     # Display boxplot from paper
     long_servedio_boxplot(test_accs, losses_text, show=cfg.show_fig, save=cfg.save_fig)
