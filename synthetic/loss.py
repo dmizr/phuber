@@ -2,7 +2,7 @@ import math
 
 import numpy as np
 
-from plots.utils import inverse_sigmoid, sigmoid
+from synthetic.utils import inverse_sigmoid, sigmoid
 
 """
 Calculates losses and gradient of losses used in "Synthetic datasets"

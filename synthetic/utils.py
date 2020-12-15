@@ -27,8 +27,8 @@ def plot_boundaries(w, samples, labels):
     x1_diff = x1_max - x1_min
 
     xx, yy = np.mgrid[
-        x0_min - x0_diff / 10: x0_max + x0_diff / 10 + eps: x0_diff / 400,
-        x1_min - x1_diff / 10: x1_max + x1_diff / 10 + eps: x1_diff / 400,
+        x0_min - x0_diff / 10 : x0_max + x0_diff / 10 + eps : x0_diff / 400,
+        x1_min - x1_diff / 10 : x1_max + x1_diff / 10 + eps : x1_diff / 400,
     ]
     grid = np.c_[xx.ravel(), yy.ravel()]
     out = (grid @ w).reshape(xx.shape)

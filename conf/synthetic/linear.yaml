@@ -1,0 +1,9 @@
+n_repeat: 500
+n_train: 1000
+n_test: 500
+corrupt_prob: 0.2
+gamma: 0.04
+var: 0.0001
+seed: null
+method: slsqp
+plot: false
