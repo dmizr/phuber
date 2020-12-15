@@ -3,7 +3,7 @@ import numpy as np
 from synthetic.utils import logit, sigmoid
 
 """
-Calculates losses and gradient of losses used in "Synthetic datasets"
+Computes losses and gradient of losses used in "Synthetic datasets"
 experiments (Section 5) from,
 `"Can gradient clipping mitigate label noise?"
 <https://openreview.net/pdf?id=rklB76EKPr>`_.
@@ -18,22 +18,22 @@ def logistic_loss(z: np.ndarray) -> np.ndarray:
 
     Shape:
         - Input: the raw, unnormalized prediction scores (model logits * labels).
-                numpy array of size :math:`(minibatch)`
+                numpy array of size :math:`(batch)`
         - Output: the loss values for prediction scores
-                numpy array of size :math:`(minibatch)`
+                numpy array of size :math:`(batch)`
     """
     z = np.clip(z, -500, 500)  # to avoid numerical errors
     return np.log(1 + np.exp(-z))
 
 
 def huberised_loss(z: np.ndarray, tau: float = 0.1) -> np.ndarray:
-    """Returns the partially huberized logistic loss for given scores.
+    """Returns the partially huberised logistic loss for given scores.
 
     Shape:
         - Input: the raw, unnormalized prediction scores (model logits * labels).
-                numpy array of size :math:`(minibatch)`
+                numpy array of size :math:`(batch)`
         - Output: the loss values for prediction scores
-                numpy array of size :math:`(minibatch)`
+                numpy array of size :math:`(batch)`
     """
     return np.where(
         # linearisation boundary
@@ -45,13 +45,13 @@ def huberised_loss(z: np.ndarray, tau: float = 0.1) -> np.ndarray:
 
 
 def partially_huberised_loss(z: np.ndarray, tau: float = 1.1) -> np.ndarray:
-    """Returns the partially huberized logistic loss for given scores.
+    """Returns the partially huberised logistic loss for given scores.
 
     Shape:
         - Input: the raw, unnormalized prediction scores (model logits * labels).
-                numpy array of size :math:`(minibatch)`
+                numpy array of size :math:`(batch)`
         - Output: the loss values for prediction scores
-                numpy array of size :math:`(minibatch)`
+                numpy array of size :math:`(batch)`
     """
     return np.where(
         # linearization boundary
@@ -87,7 +87,7 @@ def logistic_gradient(x: np.ndarray, y: np.ndarray, w: np.ndarray) -> np.ndarray
 def huberised_gradient(
     x: np.ndarray, y: np.ndarray, w: np.ndarray, tau: float = 0.1
 ) -> np.ndarray:
-    """Returns the gradient of huberized loss for a linear scorer.
+    """Returns the gradient of huberised loss for a linear scorer.
 
     Shape:
         - x: samples to be considered for gradient.
@@ -117,7 +117,7 @@ def huberised_gradient(
 def partially_huberised_gradient(
     x: np.ndarray, y: np.ndarray, w: np.ndarray, tau: float = 2
 ) -> np.ndarray:
-    """Returns the gradient of partially huberized loss for a linear scorer.
+    """Returns the gradient of partially huberised loss for a linear scorer.
 
     Shape:
         - x: samples to be considered for gradient.

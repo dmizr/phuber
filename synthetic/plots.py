@@ -14,7 +14,7 @@ def plot_boundaries(
     save_name="boundaries.png",
 ) -> None:
     """Plots decision boundaries of a linear model"""
-    # Plot when normalized
+
     fig = plt.figure(figsize=(10, 8))
     ax = fig.add_subplot(111)
     eps = 1e-6
@@ -103,9 +103,7 @@ def outliers_lineplot(
     save_name="result.png",
     seaborn_context="notebook",
 ) -> None:
-    """
-    Displays the lineplot from the Outliers synthetic experiment
-    """
+    """Displays the lineplot from the Outliers synthetic experiment"""
 
     sns.set_context(seaborn_context)
     sns.set_style("darkgrid")

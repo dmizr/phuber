@@ -8,8 +8,10 @@ def linear_objective(
     weights: np.ndarray, samples: np.ndarray, labels: np.ndarray, loss_fn: Callable
 ) -> float:
     """Calculates the final loss objective for a linear model"""
-    z = (samples @ weights) * labels  #  calculate scores for loss
-    loss = np.mean(loss_fn(z)).item()  #  mean loss value over the minibatch
+    # Compute scores for loss
+    z = (samples @ weights) * labels
+    # Mean loss over batch
+    loss = np.mean(loss_fn(z)).item()
     return loss
 
 
@@ -65,11 +67,11 @@ def evaluate_linear(
     """Evaluates the given linear classifier"""
     z = samples @ weights  # get logits
 
-    # calculate predictions ((z <= 0) => -1, (z > 0) => +1)
+    # Compute predictions ((z <= 0) => -1, (z > 0) => +1)
     preds = np.ones_like(z)
     preds[z <= 0] = -1
 
-    # calculate loss & acc
+    # Compute loss & acc
     loss = np.mean(loss_fn(z * labels)).item()
     acc = np.mean(np.equal(preds, labels)).item()
 

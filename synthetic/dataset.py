@@ -10,8 +10,9 @@ def long_servedio_dataset(
     corrupt_prob: float = 0.45,
     noise_seed: Optional[int] = None,
 ) -> Tuple[np.ndarray, np.ndarray]:
-    """Generates 2-dimensional 6-atoms Long & Servedio dataset, from`
-    "Random Classification Noise Defeats All Convex Potential Boosters"
+    """Generates samples from  mixture of 6 isotropic Gaussians,
+     which is a slight variation of the Long & Servedio dataset from
+    `"Random Classification Noise Defeats All Convex Potential Boosters"
     <http://www.cs.columbia.edu/~rocco/Public/icml08-cameraready.pdf>`_
 
     Args:
@@ -69,7 +70,7 @@ def long_servedio_dataset(
 
 
 def outlier_dataset(seed=None) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
-    """
+    """Generates Outliers dataset, containing 10'000 inliers and 50 outliers
 
     Args:
         seed: random seed for generating points
