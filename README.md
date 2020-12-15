@@ -110,6 +110,10 @@ To find out more about the configuration options for evaluation, use the `--help
 
 ![mnist_results](docs/mnist_results.png)
 
+
+#### CIFAR-100 with ResNet-50
+
+
 ## Pretrained models
 
 For each configuration, the models obtained during the first trial are available on Google Drive:
@@ -130,6 +134,26 @@ python3 synthetic_2.py
 ```
 
 ## Project structure
+
+The codebase is separated into 3 parts:
+
+#### `phuber/`
+This directory contains all the code related to the deep learning experiments on MNIST, CIFAR-10 and CIFAR-100, using PyTorch.   
+This includes:
+- Noisy MNIST, CIFAR-10 and CIFAR-100 dataset classes (with symmetric label noise), in `phuber/dataset.py`
+- CE, Unhinged, GCE, PHuber-CE and PHuber-GCE losses, in `phuber/loss.py`
+- LeNet-5 and ResNets in `phuber/network.py`
+
+
+#### `synthetic/`
+This directory contains all the code related to experiments on synthetic data with linear models, using NumPy and SciPy.
+
+
+#### `conf/`
+This directory contains all the Hydra config files for both types of experiments:
+- Config files for Hydra settings (e.g. output folder and logger) are contained in `conf/hydra`.  
+- Config files for the synthetic experiments are exclusively contained in `conf/synthetic`.  
+- All the other files in this directory are for the deep learning experiments.
 
 
 ## References
