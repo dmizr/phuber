@@ -16,6 +16,3 @@ save_fig: false
 show_fig: true
 dataset:
   name: long_servedio
-# only used with method: sgd
-lr: 0.01
-num_steps: 3000
