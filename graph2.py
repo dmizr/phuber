@@ -6,7 +6,6 @@ Created on Fri Nov 27 15:41:13 2020
 """
 
 import math
-import random
 
 import numpy as np
 from matplotlib import pyplot as plt
@@ -24,6 +23,7 @@ outliers = np.random.normal(-200, 1, 25)
 outliers = np.append(outliers, np.random.normal(200, 1, 25))
 labels_outliers = np.ones([1, 25])
 labels_outliers = np.append(labels_outliers, -1 * np.ones([1, 25]))
+
 
 # theta goes from -2.0 to 2.0, linear model implies that theta*x is the prediction
 def logistic_loss(z):

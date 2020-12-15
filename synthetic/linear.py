@@ -6,10 +6,10 @@ import scipy.optimize as optimize
 
 def linear_objective(
     weights: np.ndarray, samples: np.ndarray, labels: np.ndarray, loss_fn: Callable
-):
+) -> float:
     """Calculates the final loss objective for a linear model"""
     z = (samples @ weights) * labels  #  calculate scores for loss
-    loss = np.mean(loss_fn(z))  #  mean loss value over the minibatch
+    loss = np.mean(loss_fn(z)).item()  #  mean loss value over the minibatch
     return loss
 
 
@@ -30,7 +30,7 @@ def train_linear_sgd(
     for i in range(num_steps):
         # sample from dataset
         index = np.random.choice(samples.shape[0])
-        x, y = samples[index : index + 1], labels[index : index + 1]
+        x, y = samples[index: index + 1], labels[index: index + 1]
 
         #  update the model
         gradient = grad_fn(x, y, weights)
@@ -69,7 +69,7 @@ def evaluate_linear(
     preds[z <= 0] = -1
 
     # calculate loss & acc
-    loss = np.mean(loss_fn(z * labels))
-    acc = np.mean(np.equal(preds, labels))
+    loss = np.mean(loss_fn(z * labels)).item()
+    acc = np.mean(np.equal(preds, labels)).item()
 
     return loss, acc

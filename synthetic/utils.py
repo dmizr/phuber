@@ -1,19 +1,24 @@
+from typing import Union
+
 import matplotlib.pyplot as plt
 import numpy as np
 
 
-def sigmoid(z: np.ndarray) -> np.ndarray:
+def sigmoid(z: Union[np.ndarray, float]) -> np.ndarray:
     """Applies sigmoid function on given z."""
-    z = np.clip(z, -500, 500)  # to avoid numerical errors
-    return 1.0 / (1.0 + np.exp(-z))
+
+    # Clip to avoid numerical errors
+    z = np.clip(z, -500, 500)
+    out = 1.0 / (1.0 + np.exp(-z))
+    return out
 
 
-def inverse_sigmoid(z: np.ndarray) -> np.ndarray:
+def inverse_sigmoid(z: Union[np.ndarray, float]) -> np.ndarray:
     """Applies inverse sigmoid function on given z."""
     return np.log(z / (1 - z))
 
 
-def plot_boundaries(w, samples, labels):
+def plot_boundaries(w: np.ndarray, samples: np.ndarray, labels: np.ndarray) -> None:
     """Plots decision boundaries of a linear model"""
     # Plot when normalized
     fig = plt.figure(figsize=(10, 8))
@@ -27,8 +32,8 @@ def plot_boundaries(w, samples, labels):
     x1_diff = x1_max - x1_min
 
     xx, yy = np.mgrid[
-        x0_min - x0_diff / 10 : x0_max + x0_diff / 10 + eps : x0_diff / 400,
-        x1_min - x1_diff / 10 : x1_max + x1_diff / 10 + eps : x1_diff / 400,
+        x0_min - x0_diff / 10: x0_max + x0_diff / 10 + eps: x0_diff / 400,
+        x1_min - x1_diff / 10: x1_max + x1_diff / 10 + eps: x1_diff / 400,
     ]
     grid = np.c_[xx.ravel(), yy.ravel()]
     out = (grid @ w).reshape(xx.shape)
@@ -49,8 +54,8 @@ def plot_boundaries(w, samples, labels):
     plt.show()
 
 
-def show_data(samples, labels):
-    """Plots samples"""
+def plot_data(samples: np.ndarray, labels: np.ndarray) -> None:
+    """Plots data points"""
     plt.scatter(samples[labels == -1, 0], samples[labels == -1, 1], s=0.1, c="blue")
     plt.scatter(samples[labels == 1, 0], samples[labels == 1, 1], s=0.1, c="red")
     plt.show()

@@ -28,7 +28,7 @@ def logistic_loss(z: np.ndarray) -> np.ndarray:
     return np.log(1 + np.exp(-z))
 
 
-def huberized_loss(z: np.ndarray, tau: float = 0.1) -> np.ndarray:
+def huberised_loss(z: np.ndarray, tau: float = 0.1) -> np.ndarray:
     """Returns the partially huberized logistic loss for given scores.
 
     Shape:
@@ -38,13 +38,15 @@ def huberized_loss(z: np.ndarray, tau: float = 0.1) -> np.ndarray:
                 numpy array of size :math:`(minibatch)`
     """
     return np.where(
-        z <= -inverse_sigmoid(tau),  # linearization boundary
-        -tau * z - math.log(1 - tau) - tau * inverse_sigmoid(tau),  # huber
-        logistic_loss(z),  # default logistic loss
+        # linearisation boundary
+        z <= -inverse_sigmoid(tau),
+        # huber
+        -tau * z - math.log(1 - tau) - tau * inverse_sigmoid(tau),
+        logistic_loss(z),
     )
 
 
-def partially_huberized_loss(z: np.ndarray, tau: float = 2.0) -> np.ndarray:
+def partially_huberised_loss(z: np.ndarray, tau: float = 2.0) -> np.ndarray:
     """Returns the partially huberized logistic loss for given scores.
 
     Shape:
@@ -54,9 +56,11 @@ def partially_huberized_loss(z: np.ndarray, tau: float = 2.0) -> np.ndarray:
                 numpy array of size :math:`(minibatch)`
     """
     return np.where(
-        z <= inverse_sigmoid(1 / tau),  # linearization boundary
-        -tau * sigmoid(z) + math.log(tau) + 1,  #  partial huber
-        logistic_loss(z),  # default: logistic loss
+        # linearization boundary
+        z <= inverse_sigmoid(1 / tau),
+        #  partial huber
+        -tau * sigmoid(z) + math.log(tau) + 1,
+        logistic_loss(z),
     )
 
 
@@ -74,13 +78,15 @@ def logistic_gradient(x: np.ndarray, y: np.ndarray, w: np.ndarray) -> np.ndarray
         - Output: the gradients for each sample and weight
                 numpy array of size :math:`(minibatch, W)`
     """
-    z = y * (x @ w)  # get model scores
-    z = sigmoid(-z)  #  1 - sigmoid(z)
+    # Get model scores
+    z = y * (x @ w)
+    z = sigmoid(-z)
     y, z = y[:, np.newaxis], z[:, np.newaxis]
-    return (-z * y) * x  #  -z from d(logistic)/d(scores), y * x from d(scores)/d(w)
+    #  -z from d(logistic)/d(scores), y * x from d(scores)/d(w)
+    return (-z * y) * x
 
 
-def huberized_gradient(
+def huberised_gradient(
     x: np.ndarray, y: np.ndarray, w: np.ndarray, tau: float = 1
 ) -> np.ndarray:
     """Returns the gradient of huberized loss for a linear scorer.
@@ -96,17 +102,21 @@ def huberized_gradient(
         - Output: the gradients for each sample and weight
                 numpy array of size :math:`(minibatch, W)`
     """
-    z = y * (x @ w)  # get model scores
-    z = sigmoid(-z)  #  1 - sigmoid(z)
+    # Get model scores
+    z = y * (x @ w)
+    z = sigmoid(-z)
     y, z = y[:, np.newaxis], z[:, np.newaxis]
     return np.where(
-        z >= tau,  # linearization boundary
-        (-tau * y) * x,  #  huber gradient
-        (-z * y) * x,  # logistic gradient
+        # linearisation boundary
+        z >= tau,
+        # huber gradient
+        (-tau * y) * x,
+        # logistic gradient
+        (-z * y) * x,
     )
 
 
-def partially_huberized_gradient(
+def partially_huberised_gradient(
     x: np.ndarray, y: np.ndarray, w: np.ndarray, tau: float = 2
 ) -> np.ndarray:
     """Returns the gradient of partially huberized loss for a linear scorer.
@@ -122,11 +132,15 @@ def partially_huberized_gradient(
         - Output: the gradients for each sample and weight
                 numpy array of size :math:`(minibatch, W)`
     """
-    z = y * (x @ w)  # get model scores
+    # Get model scores
+    z = y * (x @ w)
     z = sigmoid(z)
-    y, z = y[:, np.newaxis], z[:, np.newaxis]  # to broadcast
+    y, z = y[:, np.newaxis], z[:, np.newaxis]
     return np.where(
-        z <= 1.0 / tau,  # linearization boundary
-        (-tau * z * (1 - z) * y) * x,  # partial huber gradient
-        (-(1 - z) * y) * x,  # logistic gradient (1-z) to get sigmoid(-z)
+        # linearisation boundary
+        z <= 1.0 / tau,
+        # partial huber gradient
+        (-tau * z * (1 - z) * y) * x,
+        # logistic gradient (1-z) to get sigmoid(-z)
+        (-(1 - z) * y) * x,
     )
