@@ -71,8 +71,8 @@ def long_servedio_experiment(cfg: DictConfig) -> None:
                     labels=train_labels,
                     loss_fn=loss_fns[i],
                     grad_fn=grad_fns[i],
-                    lr=cfg.lr or 0.1,
-                    num_steps=cfg.num_steps or 3000,
+                    lr=cfg.lr,
+                    num_steps=cfg.num_steps,
                 )
             else:
                 raise ValueError("Only slsqp or sgd is supported for this experiment!")
