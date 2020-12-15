@@ -65,7 +65,7 @@ def synthetic_linear(cfg: DictConfig) -> None:
                     loss_fn=loss_fncs[i],
                     grad_fn=grad_fncs[i],
                     lr=cfg.lr or 0.1,
-                    max_steps=cfg.max_steps or 3000,
+                    num_steps=cfg.num_steps or 3000,
                 )
             else:
                 raise ValueError("Only slsqp or sgd is supported for method!")

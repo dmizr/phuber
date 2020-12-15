@@ -19,7 +19,7 @@ def train_linear_sgd(
     loss_fn: Callable,
     grad_fn: Callable,
     lr: float = 0.1,
-    max_steps: int = 1000,
+    num_steps: int = 1000,
 ) -> Tuple[np.ndarray, float]:
     """Trains a linear classifier with Stochastic Gradient Descent.
 
@@ -27,7 +27,7 @@ def train_linear_sgd(
         Tuple containing the final weights of the model and the associated loss
     """
     weights = np.zeros((samples.shape[1],))
-    for i in range(max_steps):
+    for i in range(num_steps):
         # sample from dataset
         index = np.random.choice(samples.shape[0])
         x, y = samples[index : index + 1], labels[index : index + 1]
