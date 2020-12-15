@@ -3,7 +3,7 @@ from typing import Optional, Tuple
 import numpy as np
 
 
-def long_servedio(
+def long_servedio_dataset(
     N: int = 1000,
     gamma: float = 1.0 / 24.0,
     var: float = 0.01,
@@ -66,3 +66,42 @@ def long_servedio(
         labels.append(label)
 
     return np.array(samples), np.array(labels)
+
+
+def outlier_dataset(seed=None) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    """
+
+    Args:
+        seed: random seed for generating points
+
+    Returns:
+        Tuple containing the inlier features, inlier labels,
+            outlier features and outlier labels
+
+    """
+    if seed is not None:
+        np.random.seed(seed)
+
+    inlier_feats = np.concatenate(
+        [np.random.normal(1, 1, 5000), np.random.normal(-1, 1, 5000)]
+    )
+
+    inlier_labels = np.concatenate(
+        [
+            np.ones((5000,)),
+            -1 * np.ones((5000,)),
+        ]
+    )
+
+    outlier_feats = np.concatenate(
+        [np.random.normal(-200, 1, 25), np.random.normal(200, 1, 25)]
+    )
+
+    outlier_labels = np.concatenate(
+        [
+            np.ones((25,)),
+            -1 * np.ones((25,)),
+        ]
+    )
+
+    return inlier_feats, inlier_labels, outlier_feats, outlier_labels

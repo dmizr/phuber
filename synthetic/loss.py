@@ -1,8 +1,6 @@
-import math
-
 import numpy as np
 
-from synthetic.utils import inverse_sigmoid, sigmoid
+from synthetic.utils import logit, sigmoid
 
 """
 Calculates losses and gradient of losses used in "Synthetic datasets"
@@ -39,14 +37,14 @@ def huberised_loss(z: np.ndarray, tau: float = 0.1) -> np.ndarray:
     """
     return np.where(
         # linearisation boundary
-        z <= -inverse_sigmoid(tau),
+        z <= -logit(tau),
         # huber
-        -tau * z - math.log(1 - tau) - tau * inverse_sigmoid(tau),
+        -tau * z - np.log(1 - tau) - tau * logit(tau),
         logistic_loss(z),
     )
 
 
-def partially_huberised_loss(z: np.ndarray, tau: float = 2.0) -> np.ndarray:
+def partially_huberised_loss(z: np.ndarray, tau: float = 1.1) -> np.ndarray:
     """Returns the partially huberized logistic loss for given scores.
 
     Shape:
@@ -57,9 +55,9 @@ def partially_huberised_loss(z: np.ndarray, tau: float = 2.0) -> np.ndarray:
     """
     return np.where(
         # linearization boundary
-        z <= inverse_sigmoid(1 / tau),
+        z <= logit(1 / tau),
         #  partial huber
-        -tau * sigmoid(z) + math.log(tau) + 1,
+        -tau * sigmoid(z) + np.log(tau) + 1,
         logistic_loss(z),
     )
 
@@ -144,3 +142,8 @@ def partially_huberised_gradient(
         # logistic gradient (1-z) to get sigmoid(-z)
         (-(1 - z) * y) * x,
     )
+
+
+def empirical_risk_logistic_loss(labels, feats, theta):
+    risk = np.mean(logistic_loss(labels * feats * theta))
+    return risk

@@ -1,10 +1,11 @@
 import logging
+from collections import defaultdict
 
 import numpy as np
 from omegaconf import DictConfig
 from tqdm import tqdm
 
-from synthetic.dataset import long_servedio
+from synthetic.dataset import long_servedio_dataset, outlier_dataset
 from synthetic.linear import evaluate_linear, train_linear_sgd, train_linear_slsqp
 from synthetic.loss import (
     huberised_gradient,
@@ -14,10 +15,17 @@ from synthetic.loss import (
     partially_huberised_gradient,
     partially_huberised_loss,
 )
-from synthetic.plots import boxplot_long_servedio, plot_boundaries
+from synthetic.plots import long_servedio_boxplot, outliers_lineplot, plot_boundaries
 
 
 def long_servedio_experiment(cfg: DictConfig) -> None:
+    """
+    Long & Servedio (2010) synthetic experiment
+
+    Args:
+        cfg: Hydra config
+
+    """
     logger = logging.getLogger()
 
     # prepare losses and gradients
@@ -35,18 +43,18 @@ def long_servedio_experiment(cfg: DictConfig) -> None:
 
     for _ in tqdm(range(cfg.n_repeat)):
         #  generate train and test sets
-        train_samples, train_labels = long_servedio(
+        train_samples, train_labels = long_servedio_dataset(
             N=cfg.n_train,
-            corrupt_prob=cfg.corrupt_prob,
             gamma=cfg.gamma,
             var=cfg.var,
+            corrupt_prob=cfg.corrupt_prob,
             noise_seed=cfg.seed,
         )
-        test_samples, test_labels = long_servedio(
+        test_samples, test_labels = long_servedio_dataset(
             N=cfg.n_test,
-            corrupt_prob=0.0,
             gamma=cfg.gamma,
             var=cfg.var,
+            corrupt_prob=0.0,
             noise_seed=cfg.seed + 1 if cfg.seed else None,
         )
 
@@ -105,4 +113,50 @@ def long_servedio_experiment(cfg: DictConfig) -> None:
         print()
 
     # Display boxplot from paper
-    boxplot_long_servedio(test_accs, losses_text, show=cfg.show_fig, save=cfg.save_fig)
+    long_servedio_boxplot(test_accs, losses_text, show=cfg.show_fig, save=cfg.save_fig)
+
+
+def outliers_experiment(cfg: DictConfig):
+    """
+    Outliers synthetic experiment from Ding (2013)
+
+    Args:
+        cfg: Hydra config
+    """
+
+    inlier_feats, inlier_labels, outlier_feats, outlier_labels = outlier_dataset(
+        cfg.seed
+    )
+
+    all_feats = np.concatenate([inlier_feats, outlier_feats])
+    all_labels = np.concatenate([inlier_labels, outlier_labels])
+
+    thetas = np.arange(-2.0, 2.0, 0.02)
+
+    losses = defaultdict(lambda: [])
+
+    for i in thetas:
+        # Inliers
+        losses["logistic_inliers"].append(
+            np.mean(logistic_loss(inlier_labels * inlier_feats * i))
+        )
+
+        losses["huber_inliers"].append(
+            np.mean(huberised_loss(inlier_labels * inlier_feats * i))
+        )
+
+        losses["phuber_inliers"].append(
+            np.mean(partially_huberised_loss(inlier_labels * inlier_feats * i))
+        )
+
+        # Inliers + outliers
+        losses["logistic_all"].append(
+            np.mean(logistic_loss(all_labels * all_feats * i))
+        )
+        losses["huber_all"].append(np.mean(huberised_loss(all_labels * all_feats * i)))
+
+        losses["phuber_all"].append(
+            np.mean(partially_huberised_loss(all_labels * all_feats * i))
+        )
+
+    outliers_lineplot(thetas, losses, show=cfg.show_fig, save=cfg.save_fig)

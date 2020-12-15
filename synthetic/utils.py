@@ -12,6 +12,10 @@ def sigmoid(z: Union[np.ndarray, float]) -> np.ndarray:
     return out
 
 
-def inverse_sigmoid(z: Union[np.ndarray, float]) -> np.ndarray:
-    """Applies inverse sigmoid function on given z."""
-    return np.log(z / (1 - z))
+def logit(z: Union[np.ndarray, float]) -> np.ndarray:
+    """Applies inverse sigmoid function (log-odds) on given z."""
+
+    # Clip to avoid numerical errors
+    z = np.clip(z, 1e-9, 1 - 1e-9)
+    log_odds = np.log(z / (1 - z))
+    return log_odds

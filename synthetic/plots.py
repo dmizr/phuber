@@ -1,4 +1,4 @@
-from typing import List
+from typing import Dict, List
 
 import numpy as np
 import seaborn as sns
@@ -19,7 +19,7 @@ def plot_boundaries(
     ax = fig.add_subplot(111)
     eps = 1e-6
 
-    # Plot decision boundary
+    # Plot decision boundary by generating meshgrid of points
     x0_min, x0_max = -1, 1
     x1_min, x1_max = -1, 1
     x0_diff = x0_max - x0_min
@@ -44,7 +44,6 @@ def plot_boundaries(
         samples[labels == 1, 0], samples[labels == 1, 1], s=0.2, c="blue", alpha=0.5
     )
 
-    # End of plotting decision boundary
     if save:
         plt.savefig(save_name)
 
@@ -62,7 +61,7 @@ def plot_data(
     """Plots data points"""
     plt.scatter(samples[labels == -1, 0], samples[labels == -1, 1], s=0.1, c="blue")
     plt.scatter(samples[labels == 1, 0], samples[labels == 1, 1], s=0.1, c="red")
-    # End of plotting decision boundary
+
     if save:
         plt.savefig(save_name)
 
@@ -70,20 +69,61 @@ def plot_data(
         plt.show()
 
 
-def boxplot_long_servedio(
+def long_servedio_boxplot(
     test_accs: List[List[float]],
     losses_text: List[str],
     show=True,
     save=False,
     save_name="result.png",
+    seaborn_context="paper",
 ) -> None:
     """Displays the boxplot from the Long & Servedio synthetic experiment"""
 
-    sns.set_theme(style="darkgrid")
+    sns.set_context(seaborn_context)
+    sns.set_style("notebook")
+
     fig, ax = plt.subplots()
     ax = sns.boxplot(data=test_accs, showfliers=False, ax=ax)
     sns.despine(fig)
     ax.set_xticklabels(losses_text, rotation=8)
+    fig.tight_layout()
+
+    if save:
+        plt.savefig(save_name, dpi=100)
+
+    if show:
+        plt.show()
+
+
+def outliers_lineplot(
+    thetas: np.ndarray,
+    losses: Dict[str, list],
+    show=True,
+    save=False,
+    save_name="result.png",
+    seaborn_context="notebook",
+) -> None:
+    """
+    Displays the lineplot from the Outliers synthetic experiment
+    """
+
+    sns.set_context(seaborn_context)
+    sns.set_style("darkgrid")
+
+    fig, ax = plt.subplots(figsize=(5, 4))
+    ax.plot(thetas, losses["logistic_inliers"], color="green", linewidth=2)
+    ax.plot(thetas, losses["huber_inliers"], color="red", linewidth=2)
+    ax.plot(thetas, losses["phuber_inliers"], color="blue", linewidth=2)
+    ax.plot(thetas, losses["logistic_all"], "--", color="green", linewidth=2)
+    ax.plot(thetas, losses["huber_all"], "--", color="red", linewidth=2)
+    ax.plot(thetas, losses["phuber_all"], "--", color="blue", linewidth=2)
+
+    ax.legend(["Logistic", "Huber", "Partial Huber"])
+    ax.set_xlabel(r"$\Theta$")
+    ax.set_ylabel(r"R($\Theta$)")
+    ax.set_xlim([-2.0, 2.0])
+    ax.set_ylim([0, 1.3])
+    fig.tight_layout()
 
     if save:
         plt.savefig(save_name, dpi=100)
