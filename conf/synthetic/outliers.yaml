@@ -1,0 +1,13 @@
+# @package _global_
+defaults:
+  - hydra/job_logging: custom
+  - hydra/output: custom
+
+huber_tau: 0.1
+phuber_tau: 1.1
+
+seed: null
+save_fig: false
+show_fig: true
+dataset:
+  name: outliers
