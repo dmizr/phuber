@@ -143,7 +143,3 @@ def partially_huberised_gradient(
         (-(1 - z) * y) * x,
     )
 
-
-def empirical_risk_logistic_loss(labels, feats, theta):
-    risk = np.mean(logistic_loss(labels * feats * theta))
-    return risk
