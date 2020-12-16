@@ -59,7 +59,7 @@ def long_servedio_dataset(
         label = 1 if x[0] >= 0 else -1
 
         # randomly flip with corrupt probability
-        flip = np.random.choice([-1, 1], p=[1 - corrupt_prob, corrupt_prob])
+        flip = np.random.choice([-1, 1], p=[corrupt_prob, 1 - corrupt_prob])
         label = label * flip
 
         # store sample and label
