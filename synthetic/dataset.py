@@ -8,8 +8,9 @@ def long_servedio_simple(
     gamma: float = 1.0 / 24.0,
     corrupt_prob: float = 0.45,
     noise_seed: Optional[int] = None,
+    enforce_symmetry: bool = False,
 ) -> Tuple[np.ndarray, np.ndarray]:
-    """Generates 4 sample Long & Servedio (with noisy margin) dataset from
+    """Generates 4 sample Long & Servedio dataset from
     `"Random Classification Noise Defeats All Convex Potential Boosters"
     <http://www.cs.columbia.edu/~rocco/Public/icml08-cameraready.pdf>`_
 
@@ -18,6 +19,7 @@ def long_servedio_simple(
         gamma: specifies location of each atom
         corrupt_prob: applied label noise
         noise_seed: seed for applying label noise
+        enforce_symmetry: whether to use same amount of noisy samples
 
     Returns:
         samples: numpy array of size :math:`(N, 2)`
@@ -37,7 +39,14 @@ def long_servedio_simple(
     )
 
     #  all positive by default, corrupt to negative with given probability
-    labels = np.random.choice([-1, 1], p=[corrupt_prob, 1 - corrupt_prob], size=(N * 4))
+    if enforce_symmetry:
+        labels = np.repeat(  # same amount of noised versions
+            np.random.choice([-1, 1], p=[corrupt_prob, 1 - corrupt_prob], size=(N)), 4
+        )
+    else:
+        labels = np.random.choice(
+            [-1, 1], p=[corrupt_prob, 1 - corrupt_prob], size=(N * 4)
+        )
 
     return samples, labels
 

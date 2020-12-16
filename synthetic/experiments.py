@@ -73,12 +73,18 @@ def long_servedio_experiment(cfg: DictConfig) -> None:
                 gamma=cfg.gamma,
                 corrupt_prob=cfg.corrupt_prob,
                 noise_seed=cfg.seed,
+                enforce_symmetry=cfg.enforce_symmetry
+                if cfg.get("enforce_symmetry", None) is not None
+                else False,
             )
             test_samples, test_labels = long_servedio_simple(
                 N=cfg.n_test,
                 gamma=cfg.gamma,
                 corrupt_prob=0.0,
                 noise_seed=cfg.seed + 1 if cfg.seed else None,
+                enforce_symmetry=cfg.enforce_symmetry
+                if cfg.get("enforce_symmetry", None) is not None
+                else False,
             )
 
         #  iterate over losses
