@@ -36,18 +36,8 @@ def long_servedio_simple(
         * N
     )
 
-    labels = []
-    for _ in range(N):
-        flip = np.random.choice([-1, 1], p=[corrupt_prob, 1 - corrupt_prob])
-        labels.extend(
-            [
-                flip,  # "Noisy Large Margin"
-                1,  # "+1 Penalizer 1"
-                1,  #  "+1 Penalize 2"
-                1,  #  "+1 Puller""
-            ]
-        )
-    labels = np.array(labels)
+    #  all positive by default, corrupt to negative with given probability
+    labels = np.random.choice([-1, 1], p=[corrupt_prob, 1 - corrupt_prob], size=(N * 4))
 
     return samples, labels
 
