@@ -3,6 +3,56 @@ from typing import Optional, Tuple
 import numpy as np
 
 
+def long_servedio_simple(
+    N: int = 1000,
+    gamma: float = 1.0 / 24.0,
+    corrupt_prob: float = 0.45,
+    noise_seed: Optional[int] = None,
+    enforce_symmetry: bool = False,
+) -> Tuple[np.ndarray, np.ndarray]:
+    """Generates 4 sample Long & Servedio dataset from
+    `"Random Classification Noise Defeats All Convex Potential Boosters"
+    <http://www.cs.columbia.edu/~rocco/Public/icml08-cameraready.pdf>`_
+
+    Args:
+        N: number of samples
+        gamma: specifies location of each atom
+        corrupt_prob: applied label noise
+        noise_seed: seed for applying label noise
+        enforce_symmetry: whether to use same amount of noisy samples
+
+    Returns:
+        samples: numpy array of size :math:`(N, 2)`
+        labels: numpy array of size :math:`(N)` with :math:`\pm1` labels
+    """
+    if noise_seed is not None:
+        np.random.seed(noise_seed)
+
+    samples = np.repeat(
+        np.array(
+            [
+                [1, 0],  #  "Large Margin"
+                [gamma, -gamma],  # "Penalizer 1"
+                [gamma, -gamma],  # "Penalizer 2"
+                [gamma, 5 * gamma],  # "Puller"
+            ]
+        ),
+        N,
+    )
+
+    #  all positive by default, corrupt to negative with given probability
+    if enforce_symmetry:
+        labels = np.repeat(  # same amount of noised versions
+            np.random.choice([-1, 1], p=[corrupt_prob, 1 - corrupt_prob], size=(N)), 4
+        )
+    else:
+        labels = np.random.choice(
+            [-1, 1], p=[corrupt_prob, 1 - corrupt_prob], size=(N * 4)
+        )
+
+    return samples, labels
+
+
 def long_servedio_dataset(
     N: int = 1000,
     gamma: float = 1.0 / 24.0,
@@ -10,7 +60,7 @@ def long_servedio_dataset(
     corrupt_prob: float = 0.45,
     noise_seed: Optional[int] = None,
 ) -> Tuple[np.ndarray, np.ndarray]:
-    """Generates samples from  mixture of 6 isotropic Gaussians,
+    """Generates samples from mixture of 6 isotropic Gaussians,
      which is a slight variation of the Long & Servedio dataset from
     `"Random Classification Noise Defeats All Convex Potential Boosters"
     <http://www.cs.columbia.edu/~rocco/Public/icml08-cameraready.pdf>`_
@@ -59,7 +109,7 @@ def long_servedio_dataset(
         label = 1 if x[0] >= 0 else -1
 
         # randomly flip with corrupt probability
-        flip = np.random.choice([-1, 1], p=[1 - corrupt_prob, corrupt_prob])
+        flip = np.random.choice([-1, 1], p=[corrupt_prob, 1 - corrupt_prob])
         label = label * flip
 
         # store sample and label
