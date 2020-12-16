@@ -92,7 +92,12 @@ def long_servedio_experiment(cfg: DictConfig) -> None:
             # train linear model
             if cfg.method == "slsqp":
                 weights, _ = train_linear_slsqp(
-                    samples=train_samples, labels=train_labels, loss_fn=loss_fns[i]
+                    samples=train_samples,
+                    labels=train_labels,
+                    loss_fn=loss_fns[i],
+                    max_iter=cfg.max_iter
+                    if cfg.get("max_iter", None) is not None
+                    else 100,
                 )
             elif cfg.method == "sgd":
                 weights, _ = train_linear_sgd(

@@ -42,7 +42,7 @@ def train_linear_sgd(
 
 
 def train_linear_slsqp(
-    samples: np.ndarray, labels: np.ndarray, loss_fn: Callable
+    samples: np.ndarray, labels: np.ndarray, loss_fn: Callable, max_iter: int = 100
 ) -> Tuple[np.ndarray, float]:
     """Trains a linear classifier with SLSQP from scipy
 
@@ -53,7 +53,11 @@ def train_linear_slsqp(
 
     # optimize with scipy SLSQP
     opt_result = optimize.minimize(
-        linear_objective, weights, (samples, labels, loss_fn), method="SLSQP"
+        linear_objective,
+        weights,
+        (samples, labels, loss_fn),
+        method="SLSQP",
+        options={"maxiter": max_iter},
     )
 
     # return weights of the linear classifier
