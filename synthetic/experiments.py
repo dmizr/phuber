@@ -90,6 +90,7 @@ def long_servedio_experiment(cfg: DictConfig) -> None:
                     weights,
                     train_samples,
                     train_labels,
+                    title=losses_text[i],
                     show=cfg.show_fig,
                     save=cfg.save_fig,
                     save_name=f"boundaries_{losses_text[i]}.png",

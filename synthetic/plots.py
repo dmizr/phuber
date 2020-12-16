@@ -9,6 +9,7 @@ def plot_boundaries(
     w: np.ndarray,
     samples: np.ndarray,
     labels: np.ndarray,
+    title: str,
     show=True,
     save=False,
     save_name="boundaries.png",
@@ -43,6 +44,7 @@ def plot_boundaries(
     plt.scatter(
         samples[labels == 1, 0], samples[labels == 1, 1], s=0.2, c="blue", alpha=0.5
     )
+    plt.title(title)
 
     if save:
         plt.savefig(save_name)
