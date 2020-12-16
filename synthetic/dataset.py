@@ -3,6 +3,55 @@ from typing import Optional, Tuple
 import numpy as np
 
 
+def long_servedio_simple(
+    N: int = 1000,
+    gamma: float = 1.0 / 24.0,
+    corrupt_prob: float = 0.45,
+    noise_seed: Optional[int] = None,
+) -> Tuple[np.ndarray, np.ndarray]:
+    """Generates 4 sample Long & Servedio (with noisy margin) dataset from
+    `"Random Classification Noise Defeats All Convex Potential Boosters"
+    <http://www.cs.columbia.edu/~rocco/Public/icml08-cameraready.pdf>`_
+
+    Args:
+        N: number of samples
+        gamma: specifies location of each atom
+        corrupt_prob: applied label noise
+        noise_seed: seed for applying label noise
+
+    Returns:
+        samples: numpy array of size :math:`(N, 2)`
+        labels: numpy array of size :math:`(N)` with :math:`\pm1` labels
+    """
+    if noise_seed is not None:
+        np.random.seed(noise_seed)
+
+    samples = np.array(
+        [
+            [1, 0],  #  "Large Margin"
+            [gamma, -gamma],  # "Penalizer 1"
+            [gamma, -gamma],  # "Penalizer 2"
+            [gamma, 5 * gamma],  # "Puller"
+        ]
+        * N
+    )
+
+    labels = []
+    for _ in range(N):
+        flip = np.random.choice([-1, 1], p=[corrupt_prob, 1 - corrupt_prob])
+        labels.extend(
+            [
+                flip,  # "Noisy Large Margin"
+                1,  # "+1 Penalizer 1"
+                1,  #  "+1 Penalize 2"
+                1,  #  "+1 Puller""
+            ]
+        )
+    labels = np.array(labels)
+
+    return samples, labels
+
+
 def long_servedio_dataset(
     N: int = 1000,
     gamma: float = 1.0 / 24.0,
@@ -10,7 +59,7 @@ def long_servedio_dataset(
     corrupt_prob: float = 0.45,
     noise_seed: Optional[int] = None,
 ) -> Tuple[np.ndarray, np.ndarray]:
-    """Generates samples from  mixture of 6 isotropic Gaussians,
+    """Generates samples from mixture of 6 isotropic Gaussians,
      which is a slight variation of the Long & Servedio dataset from
     `"Random Classification Noise Defeats All Convex Potential Boosters"
     <http://www.cs.columbia.edu/~rocco/Public/icml08-cameraready.pdf>`_
@@ -87,22 +136,12 @@ def outlier_dataset(seed=None) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.n
         [np.random.normal(1, 1, 5000), np.random.normal(-1, 1, 5000)]
     )
 
-    inlier_labels = np.concatenate(
-        [
-            np.ones((5000,)),
-            -1 * np.ones((5000,)),
-        ]
-    )
+    inlier_labels = np.concatenate([np.ones((5000,)), -1 * np.ones((5000,)),])
 
     outlier_feats = np.concatenate(
         [np.random.normal(-200, 1, 25), np.random.normal(200, 1, 25)]
     )
 
-    outlier_labels = np.concatenate(
-        [
-            np.ones((25,)),
-            -1 * np.ones((25,)),
-        ]
-    )
+    outlier_labels = np.concatenate([np.ones((25,)), -1 * np.ones((25,)),])
 
     return inlier_feats, inlier_labels, outlier_feats, outlier_labels

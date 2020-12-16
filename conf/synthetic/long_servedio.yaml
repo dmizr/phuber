@@ -12,6 +12,7 @@ phuber_tau: 1.36 # ~ 1 + exp(-1)
 corrupt_prob: 0.2
 gamma: 0.0417 # ~ 1/24
 var: 0.0001
+mixture: true
 seed: null
 method: slsqp
 plot_boundaries: false # avoid calling for many repeats

@@ -5,7 +5,11 @@ import numpy as np
 from omegaconf import DictConfig
 from tqdm import tqdm
 
-from synthetic.dataset import long_servedio_dataset, outlier_dataset
+from synthetic.dataset import (
+    long_servedio_dataset,
+    long_servedio_simple,
+    outlier_dataset,
+)
 from synthetic.linear import evaluate_linear, train_linear_sgd, train_linear_slsqp
 from synthetic.loss import (
     huberised_gradient,
@@ -48,20 +52,34 @@ def long_servedio_experiment(cfg: DictConfig) -> None:
 
     for _ in tqdm(range(cfg.n_repeat)):
         #  generate train and test sets
-        train_samples, train_labels = long_servedio_dataset(
-            N=cfg.n_train,
-            gamma=cfg.gamma,
-            var=cfg.var,
-            corrupt_prob=cfg.corrupt_prob,
-            noise_seed=cfg.seed,
-        )
-        test_samples, test_labels = long_servedio_dataset(
-            N=cfg.n_test,
-            gamma=cfg.gamma,
-            var=cfg.var,
-            corrupt_prob=0.0,
-            noise_seed=cfg.seed + 1 if cfg.seed else None,
-        )
+        if cfg.mixture:  #  use gaussian mixtrue
+            train_samples, train_labels = long_servedio_dataset(
+                N=cfg.n_train,
+                gamma=cfg.gamma,
+                var=cfg.var,
+                corrupt_prob=cfg.corrupt_prob,
+                noise_seed=cfg.seed,
+            )
+            test_samples, test_labels = long_servedio_dataset(
+                N=cfg.n_test,
+                gamma=cfg.gamma,
+                var=cfg.var,
+                corrupt_prob=0.0,
+                noise_seed=cfg.seed + 1 if cfg.seed else None,
+            )
+        else:  #  use fixed 4 points with noisy "large margin"
+            train_samples, train_labels = long_servedio_simple(
+                N=cfg.n_train,
+                gamma=cfg.gamma,
+                corrupt_prob=cfg.corrupt_prob,
+                noise_seed=cfg.seed,
+            )
+            test_samples, test_labels = long_servedio_simple(
+                N=cfg.n_test,
+                gamma=cfg.gamma,
+                corrupt_prob=0.0,
+                noise_seed=cfg.seed + 1 if cfg.seed else None,
+            )
 
         #  iterate over losses
         for i in range(3):
