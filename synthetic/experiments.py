@@ -5,7 +5,11 @@ import numpy as np
 from omegaconf import DictConfig
 from tqdm import tqdm
 
-from synthetic.dataset import long_servedio_dataset, outlier_dataset
+from synthetic.dataset import (
+    long_servedio_dataset,
+    long_servedio_simple,
+    outlier_dataset,
+)
 from synthetic.linear import evaluate_linear, train_linear_sgd, train_linear_slsqp
 from synthetic.loss import (
     huberised_gradient,
@@ -46,29 +50,61 @@ def long_servedio_experiment(cfg: DictConfig) -> None:
     train_accs, train_losses = [[] for _ in range(3)], [[] for _ in range(3)]
     test_accs, test_losses = [[] for _ in range(3)], [[] for _ in range(3)]
 
-    for _ in tqdm(range(cfg.n_repeat)):
+    # Prepare seeds
+    if cfg.seed:
+        np.random.seed(cfg.seed)
+        seeds = np.random.choice(
+            range(min(1_000_000, 2 * cfg.n_repeat)), 2 * cfg.n_repeat
+        )
+
+    for n_trial in tqdm(range(cfg.n_repeat)):
         #  generate train and test sets
-        train_samples, train_labels = long_servedio_dataset(
-            N=cfg.n_train,
-            gamma=cfg.gamma,
-            var=cfg.var,
-            corrupt_prob=cfg.corrupt_prob,
-            noise_seed=cfg.seed,
-        )
-        test_samples, test_labels = long_servedio_dataset(
-            N=cfg.n_test,
-            gamma=cfg.gamma,
-            var=cfg.var,
-            corrupt_prob=0.0,
-            noise_seed=cfg.seed + 1 if cfg.seed else None,
-        )
+        if cfg.mixture:  #  use gaussian mixtrue
+            train_samples, train_labels = long_servedio_dataset(
+                N=cfg.n_train,
+                gamma=cfg.gamma,
+                var=cfg.var,
+                corrupt_prob=cfg.corrupt_prob,
+                noise_seed=seeds[2 * n_trial] if cfg.seed else None,
+            )
+            test_samples, test_labels = long_servedio_dataset(
+                N=cfg.n_test,
+                gamma=cfg.gamma,
+                var=cfg.var,
+                corrupt_prob=0.0,
+                noise_seed=seeds[2 * n_trial + 1] if cfg.seed else None,
+            )
+        else:  #  use fixed 4 points with noisy "large margin"
+            train_samples, train_labels = long_servedio_simple(
+                N=cfg.n_train,
+                gamma=cfg.gamma,
+                corrupt_prob=cfg.corrupt_prob,
+                noise_seed=seeds[2 * n_trial] if cfg.seed else None,
+                enforce_symmetry=cfg.enforce_symmetry
+                if cfg.get("enforce_symmetry", None) is not None
+                else False,
+            )
+            test_samples, test_labels = long_servedio_simple(
+                N=cfg.n_test,
+                gamma=cfg.gamma,
+                corrupt_prob=0.0,
+                noise_seed=seeds[2 * n_trial + 1] if cfg.seed else None,
+                enforce_symmetry=cfg.enforce_symmetry
+                if cfg.get("enforce_symmetry", None) is not None
+                else False,
+            )
 
         #  iterate over losses
         for i in range(3):
             # train linear model
             if cfg.method == "slsqp":
                 weights, _ = train_linear_slsqp(
-                    samples=train_samples, labels=train_labels, loss_fn=loss_fns[i]
+                    samples=train_samples,
+                    labels=train_labels,
+                    loss_fn=loss_fns[i],
+                    max_iter=cfg.max_iter
+                    if cfg.get("max_iter", None) is not None
+                    else 100,
                 )
             elif cfg.method == "sgd":
                 weights, _ = train_linear_sgd(
@@ -90,6 +126,7 @@ def long_servedio_experiment(cfg: DictConfig) -> None:
                     weights,
                     train_samples,
                     train_labels,
+                    title=losses_text[i],
                     show=cfg.show_fig,
                     save=cfg.save_fig,
                     save_name=f"boundaries_{losses_text[i]}.png",

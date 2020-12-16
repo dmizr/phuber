@@ -142,8 +142,3 @@ def partially_huberised_gradient(
         # logistic gradient (1-z) to get sigmoid(-z)
         (-(1 - z) * y) * x,
     )
-
-
-def empirical_risk_logistic_loss(labels, feats, theta):
-    risk = np.mean(logistic_loss(labels * feats * theta))
-    return risk
