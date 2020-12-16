@@ -50,7 +50,14 @@ def long_servedio_experiment(cfg: DictConfig) -> None:
     train_accs, train_losses = [[] for _ in range(3)], [[] for _ in range(3)]
     test_accs, test_losses = [[] for _ in range(3)], [[] for _ in range(3)]
 
-    for _ in tqdm(range(cfg.n_repeat)):
+    # Prepare seeds
+    if cfg.seed:
+        np.random.seed(cfg.seed)
+        seeds = np.random.choice(
+            range(min(1_000_000, 2 * cfg.n_repeat)), 2 * cfg.n_repeat
+        )
+
+    for n_trial in tqdm(range(cfg.n_repeat)):
         #  generate train and test sets
         if cfg.mixture:  #  use gaussian mixtrue
             train_samples, train_labels = long_servedio_dataset(
@@ -58,21 +65,21 @@ def long_servedio_experiment(cfg: DictConfig) -> None:
                 gamma=cfg.gamma,
                 var=cfg.var,
                 corrupt_prob=cfg.corrupt_prob,
-                noise_seed=cfg.seed,
+                noise_seed=seeds[2 * n_trial] if cfg.seed else None,
             )
             test_samples, test_labels = long_servedio_dataset(
                 N=cfg.n_test,
                 gamma=cfg.gamma,
                 var=cfg.var,
                 corrupt_prob=0.0,
-                noise_seed=cfg.seed + 1 if cfg.seed else None,
+                noise_seed=seeds[2 * n_trial + 1] if cfg.seed else None,
             )
         else:  #  use fixed 4 points with noisy "large margin"
             train_samples, train_labels = long_servedio_simple(
                 N=cfg.n_train,
                 gamma=cfg.gamma,
                 corrupt_prob=cfg.corrupt_prob,
-                noise_seed=cfg.seed,
+                noise_seed=seeds[2 * n_trial] if cfg.seed else None,
                 enforce_symmetry=cfg.enforce_symmetry
                 if cfg.get("enforce_symmetry", None) is not None
                 else False,
@@ -81,7 +88,7 @@ def long_servedio_experiment(cfg: DictConfig) -> None:
                 N=cfg.n_test,
                 gamma=cfg.gamma,
                 corrupt_prob=0.0,
-                noise_seed=cfg.seed + 1 if cfg.seed else None,
+                noise_seed=seeds[2 * n_trial + 1] if cfg.seed else None,
                 enforce_symmetry=cfg.enforce_symmetry
                 if cfg.get("enforce_symmetry", None) is not None
                 else False,
