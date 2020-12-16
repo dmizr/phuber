@@ -28,14 +28,16 @@ def long_servedio_simple(
     if noise_seed is not None:
         np.random.seed(noise_seed)
 
-    samples = np.array(
-        [
-            [1, 0],  #  "Large Margin"
-            [gamma, -gamma],  # "Penalizer 1"
-            [gamma, -gamma],  # "Penalizer 2"
-            [gamma, 5 * gamma],  # "Puller"
-        ]
-        * N
+    samples = np.repeat(
+        np.array(
+            [
+                [1, 0],  #  "Large Margin"
+                [gamma, -gamma],  # "Penalizer 1"
+                [gamma, -gamma],  # "Penalizer 2"
+                [gamma, 5 * gamma],  # "Puller"
+            ]
+        ),
+        N,
     )
 
     #  all positive by default, corrupt to negative with given probability
@@ -135,12 +137,22 @@ def outlier_dataset(seed=None) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.n
         [np.random.normal(1, 1, 5000), np.random.normal(-1, 1, 5000)]
     )
 
-    inlier_labels = np.concatenate([np.ones((5000,)), -1 * np.ones((5000,)),])
+    inlier_labels = np.concatenate(
+        [
+            np.ones((5000,)),
+            -1 * np.ones((5000,)),
+        ]
+    )
 
     outlier_feats = np.concatenate(
         [np.random.normal(-200, 1, 25), np.random.normal(200, 1, 25)]
     )
 
-    outlier_labels = np.concatenate([np.ones((25,)), -1 * np.ones((25,)),])
+    outlier_labels = np.concatenate(
+        [
+            np.ones((25,)),
+            -1 * np.ones((25,)),
+        ]
+    )
 
     return inlier_feats, inlier_labels, outlier_feats, outlier_labels
