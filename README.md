@@ -113,6 +113,17 @@ To find out more about the configuration options for evaluation, use the `--help
 
 #### CIFAR-100 with ResNet-50
 
+| Loss function   | ρ = 0.0   | ρ = 0.2   | ρ = 0.4   | ρ = 0.6   |
+|:----------------|:----------|:----------|:----------|:----------|
+| CE              | **75.4±0.3**  | 62.2±0.4  | 45.8±0.9  | 26.7±0.1  |
+| CE + clipping   | 23.5±0.2  | 20.4±0.4  | 16.2±0.5  | 12.9±0.1  |
+| Linear          | 13.7±0.7  | 8.2±0.3   | 5.9±0.7   | 3.9±0.3   |
+| GCE             | 73.3±0.2  | **68.5±0.3**  | 59.5±0.5  | 40.3±0.4  |
+| PHuber-CE τ=10  | 60.6±1.1  | 54.8±1.2  | 43.1±1.1  | 24.3±0.8  |
+| PHuber-GCE τ=10 | 72.7±0.1  | 68.4±0.1  | **60.2±0.2**  | **42.2±0.4**  |
+
+
+![mnist_results](docs/cifar100_results.png)
 
 ## Pretrained models
 
@@ -157,7 +168,7 @@ This directory contains all the Hydra config files for both types of experiments
 
 
 ## References
-- Menon et al., ["Can gradient clipping mitigate label noise?""](https://openreview.net/pdf?id=rklB76EKPr), ICLR 2020
+- Menon et al., ["Can gradient clipping mitigate label noise?"](https://openreview.net/pdf?id=rklB76EKPr), ICLR 2020
 - van Rooyen et al., ["Learning with Symmetric Label Noise: The Importance of Being Unhinged"](https://arxiv.org/abs/1505.07634v1), NeurIPS 2015
 - Zhang & Sabuncu, ["Generalized Cross Entropy Loss for Training Deep Neural Networks with Noisy Labels"](https://arxiv.org/abs/1805.07836), NeurIPS 2018
 - LeCun et al., ["Gradient-based learning applied to document recognition"](http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf), IEEE 1998
