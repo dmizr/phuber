@@ -16,7 +16,7 @@ hydra:
       direction: maximize
       study_name: ${hydra.job.name}/${dataset.name}/${now:%Y-%m-%d_%H-%M-%S}
       storage: sqlite:///results/tuning.db
-      n_trials: 15
+      n_trials: 20
       n_jobs: 1
       sampler: tpe
       seed: null

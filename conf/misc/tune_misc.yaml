@@ -13,4 +13,4 @@ dataset:
     split: 0.2
     use: true
   test:
-    use: true
+    use: false
