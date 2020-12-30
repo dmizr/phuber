@@ -1,0 +1,22 @@
+defaults:
+  - dataset: mnist
+  - model: lenet
+  - loss: phuber_ce
+  - hparams: ${defaults.0.dataset}_${defaults.1.model} # change when Hydra 1.1 releases
+    optional: false # more info: https://hydra.cc/docs/patterns/specializing_config
+    # Note: hyper-parameters are automatically set when specifying dataset and model
+  - misc: tune_misc
+  - hydra/sweeper: optuna
+  - hydra/job_logging: custom
+  - hydra/output: custom
+
+hydra:
+  sweeper:
+    optuna_config:
+      direction: maximize
+      study_name: ${hydra.job.name}/${dataset.name}/${now:%Y-%m-%d_%H-%M-%S}
+      storage: sqlite:///results/tuning.db
+      n_trials: 15
+      n_jobs: 1
+      sampler: tpe
+      seed: null

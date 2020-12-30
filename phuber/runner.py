@@ -17,11 +17,14 @@ from phuber.transform import cifar10_transform, cifar100_transform, mnist_transf
 from phuber.utils import flatten, to_clean_str
 
 
-def train(cfg: DictConfig) -> None:
+def train(cfg: DictConfig) -> Tuple[Optional[float], Optional[float], Optional[float]]:
     """Trains model from config
 
     Args:
         cfg: Hydra config
+
+    Returns:
+        Tuple of train, validation and test accuracy (on a 0 to 1 scale)
 
     """
     # Logger
@@ -82,21 +85,60 @@ def train(cfg: DictConfig) -> None:
     # Launch training process
     trainer.train()
 
+    # End of training & model evaluation
+    train_acc, val_acc, test_acc = None, None, None
+
+    # Train evaluation
+    if train_loader is not None:
+        logger.info("Evaluating on training data")
+        evaluator = Evaluator(
+            model=model, device=device, loader=train_loader, checkpoint_path=None
+        )
+        train_acc = evaluator.evaluate()
+
+        if writer:
+            writer.add_scalar("Eval/Accuracy/train", train_acc, -1)
+
+    # Val evaluation
+    if val_loader is not None:
+        logger.info("Evaluating on validation data")
+        evaluator = Evaluator(
+            model=model, device=device, loader=val_loader, checkpoint_path=None
+        )
+        val_acc = evaluator.evaluate()
+
+        if writer:
+            writer.add_scalar("Eval/Accuracy/val", val_acc, -1)
+
+    # Test evaluation
     if test_loader is not None:
-        logger.info("\nEvaluating on test data")
+        logger.info("Evaluating on test data")
         evaluator = Evaluator(
             model=model, device=device, loader=test_loader, checkpoint_path=None
         )
-        accuracy = evaluator.evaluate()
+        test_acc = evaluator.evaluate()
 
         if writer:
-            writer.add_scalar("Eval/Accuracy/test", accuracy, -1)
+            writer.add_scalar("Eval/Accuracy/test", test_acc, -1)
 
-        if cfg.tensorboard:
-            res_path = hydra.utils.to_absolute_path(f"results/{cfg.dataset.name}/")
-            params = flatten(OmegaConf.to_container(cfg, resolve=True))
-            with SummaryWriter(res_path) as w:
-                w.add_hparams(params, {"accuracy": accuracy})
+    # Store hyper-parameters and accuracies in results/ directory
+    if cfg.tensorboard:
+        res_path = hydra.utils.to_absolute_path(f"results/{cfg.dataset.name}/")
+        hparam_dict = flatten(OmegaConf.to_container(cfg, resolve=True))
+        acc_dict = {
+            name: acc
+            for name, acc in (
+                ["train_acc", train_acc],
+                ["val_acc", val_acc],
+                ["test_acc", test_acc],
+            )
+            if acc is not None
+        }
+
+        with SummaryWriter(res_path) as w:
+            w.add_hparams(hparam_dict, acc_dict)
+
+    return train_acc, val_acc, test_acc
 
 
 def evaluate(cfg: DictConfig) -> None:

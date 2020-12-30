@@ -109,7 +109,7 @@ class Trainer:
             self._end_loop(epoch, epoch_time)
 
         train_time_h = (time.time() - start_time) / 3600
-        self.logger.info(f"Finished training! Total time: {train_time_h:.2f}h")
+        self.logger.info(f"Finished training! Total time: {train_time_h:.2f}h\n")
         self._save_model(os.path.join(self.save_path, "final_model.pt"), self.epochs)
 
     def _train_loop(self, epoch: int) -> None:

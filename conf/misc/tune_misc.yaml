@@ -1,0 +1,16 @@
+# @package _global_
+checkpoint: null # add checkpoint path here
+tensorboard: true
+auto_cpu_if_no_gpu: true
+device: cuda:0
+mixed_precision: false
+save: true
+
+dataset:
+  train:
+    use: true
+  val:
+    split: 0.2
+    use: true
+  test:
+    use: true
