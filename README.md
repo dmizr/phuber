@@ -120,7 +120,7 @@ To find out more about the configuration options for evaluation, use the `--help
 | PHuber-CE τ=2   | 94.8±0.0  | **92.8±0.2**  | **87.8±0.2**  | **73.2±0.2**  |
 | PHuber-GCE τ=10 | 95.4±0.1  | 92.2±0.2  | 81.5±0.2  | 54.3±0.5  |
 
-![cifar10_results](docs/cifar100_readme.png)
+![cifar10_results](docs/cifar10_readme.png)
 
 #### CIFAR-100 with ResNet-50
 
