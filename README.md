@@ -108,8 +108,19 @@ To find out more about the configuration options for evaluation, use the `--help
 | PHuber-CE τ=10  | 99.0±0.0  | 98.8±0.1  | 98.5±0.1  | 97.6±0.0  |
 | PHuber-GCE τ=10 | 98.9±0.0  | 98.7±0.0  | 98.4±0.0  | 98.0±0.0  |
 
-![mnist_results](docs/mnist_comparison.png)
+![mnist_results](docs/mnist_readme.png)
 
+#### CIFAR-10 with ResNet-50
+| Loss function   | ρ = 0.0   | ρ = 0.2   | ρ = 0.4   | ρ = 0.6   |
+|:----------------|:----------|:----------|:----------|:----------|
+| CE              | **95.8±0.1**  | 84.0±0.3  | 67.8±0.3  | 44.0±0.2  |
+| CE + clipping   | 89.3±0.0  | 82.6±1.6  | 78.7±0.2  | 67.6±0.1  |
+| Linear          | 94.1±0.1  | 91.4±0.5  | 86.0±2.4  | 58.6±5.2  |
+| GCE             | 95.3±0.0  | 92.5±0.1  | 82.4±0.1  | 53.3±0.3  |
+| PHuber-CE τ=2   | 94.8±0.0  | **92.8±0.2**  | **87.8±0.2**  | **73.2±0.2**  |
+| PHuber-GCE τ=10 | 95.4±0.1  | 92.2±0.2  | 81.5±0.2  | 54.3±0.5  |
+
+![cifar10_results](docs/cifar10_readme.png)
 
 #### CIFAR-100 with ResNet-50
 
@@ -124,7 +135,7 @@ To find out more about the configuration options for evaluation, use the `--help
 | PHuber-CE τ=50  | **75.4±0.2**  | 65.9±0.2  | 49.1±0.2  | 26.9±0.0  |
 
 
-![mnist_results](docs/cifar100_comparison.png)
+![cifar100_results](docs/cifar100_readme.png)
 
 ## Pretrained models
 
