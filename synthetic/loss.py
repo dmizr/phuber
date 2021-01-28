@@ -27,7 +27,7 @@ def logistic_loss(z: np.ndarray) -> np.ndarray:
 
 
 def huberised_loss(z: np.ndarray, tau: float = 0.1) -> np.ndarray:
-    """Returns the partially huberised logistic loss for given scores.
+    """Returns the huberised logistic loss for given scores.
 
     Shape:
         - Input: the raw, unnormalized prediction scores (model logits * labels).
