@@ -1,4 +1,4 @@
-# Can gradient clipping mitigate label noise?
+# [Re] Can gradient clipping mitigate label noise?
 
 [![Python 3.8](https://img.shields.io/badge/python-3.8-blue.svg)](https://www.python.org/downloads/release/python-380//)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -13,7 +13,7 @@ For the experiments, the following losses are also implemented:
 - [Unhinged loss](https://arxiv.org/abs/1505.07634v1) (van Rooyen et al., NeurIPS 2015)
 - [Generalized Cross Entropy loss](https://arxiv.org/abs/1805.07836v4) (Zhang & Sabuncu, NeurIPS 2018)
 
-An accompanying reproducibility report can be found on [OpenReview](https://openreview.net/forum?id=TM_SgwWJA23).
+An accompanying reproducibility report can be found on [OpenReview](https://openreview.net/forum?id=TM_SgwWJA23), as part of the [ML Reproducibility Challenge 2020](https://paperswithcode.com/rc2020).
 
 
 ## Table of Contents
