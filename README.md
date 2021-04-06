@@ -13,7 +13,7 @@ For the experiments, the following losses are also implemented:
 - [Unhinged loss](https://arxiv.org/abs/1505.07634v1) (van Rooyen et al., NeurIPS 2015)
 - [Generalized Cross Entropy loss](https://arxiv.org/abs/1805.07836v4) (Zhang & Sabuncu, NeurIPS 2018)
 
-An accompanying reproducibility report can be found on [OpenReview](https://openreview.net/forum?id=TM_SgwWJA23).
+An accompanying reproducibility report can be found on [OpenReview](https://openreview.net/forum?id=TM_SgwWJA23), as part of the ML Reproducibility Challenge 2020.
 
 
 ## Table of Contents
