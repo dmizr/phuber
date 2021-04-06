@@ -13,6 +13,8 @@ For the experiments, the following losses are also implemented:
 - [Unhinged loss](https://arxiv.org/abs/1505.07634v1) (van Rooyen et al., NeurIPS 2015)
 - [Generalized Cross Entropy loss](https://arxiv.org/abs/1805.07836v4) (Zhang & Sabuncu, NeurIPS 2018)
 
+An accompanying reproducibility report can be found on [OpenReview](https://openreview.net/forum?id=TM_SgwWJA23).
+
 
 ## Table of Contents
 - [Dependencies](#dependencies)
@@ -139,9 +141,9 @@ To find out more about the configuration options for evaluation, use the `--help
 ## Pretrained models
 
 For each configuration, the models obtained during the first trial are available on Google Drive:
-- [Pretrained LeNet on MNIST](https://drive.google.com/drive/folders/11K77jz6Kx0RQZTq1yEKJsgMbugYutfdj?usp=sharing)
-- [Pretrained ResNet-50 on CIFAR-10](https://drive.google.com/drive/folders/131pQY5bf4BaN6y0sBqBK6-LScbYRQaG8?usp=sharing)
-- [Pretrained ResNet-50 on CIFAR-100](https://drive.google.com/drive/folders/1-0bPSBo6ayz2sxayVyIG7Gd0ib0ZQSKi?usp=sharing)
+- [Pretrained LeNet on MNIST](https://drive.google.com/drive/folders/1_sVDLPUqmIyRPMYD0tNTOR3V1PJATIJD?usp=sharing)
+- [Pretrained ResNet-50 on CIFAR-10](https://drive.google.com/drive/folders/1Lo06OJX-QDV01ePrecaXREgn8AWgaXgY?usp=sharing)
+- [Pretrained ResNet-50 on CIFAR-100](https://drive.google.com/drive/folders/1Aas0q2LuaYr1ljHJXKTT4tIiwP0OzD3i?usp=sharing)
 
 
 ## Synthetic experiments
