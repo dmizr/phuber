@@ -16,7 +16,7 @@ Our [reproducibility report can be found on OpenReview](https://openreview.net/f
 ```BibTeX
 @inproceedings{mizrahi2021re,
 title={[Re] Can gradient clipping mitigate label noise?},
-author={David Mizrahi and O{\u{g}}uz Kaan Y{\"u}ksel and Aiday Marlen Kyzy},
+author={David Mizrahi and Oğuz Kaan Yüksel and Aiday Marlen Kyzy},
 booktitle={ML Reproducibility Challenge 2020},
 year={2021},
 url={https://openreview.net/forum?id=TM_SgwWJA23}
