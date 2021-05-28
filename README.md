@@ -5,14 +5,16 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 
+### [ReScience](http://rescience.github.io/bibliography/Mizrahi_2021.html) | [OpenReview](https://openreview.net/forum?id=TM_SgwWJA23)
+
+
 This is a non-official [PyTorch](https://pytorch.org/) implementation of the ICLR 2020 paper "[Can gradient clipping mitigate label noise?](https://openreview.net/pdf?id=rklB76EKPr)" by Menon et al. This paper studies the robustness of gradient clipping to symmetric label noise, and proposes partially Huberised (PHuber) versions of standard losses, which perform well in the presence of label noise.
 
 For the experiments, the following losses are also implemented:
 - [Unhinged loss](https://arxiv.org/abs/1505.07634v1) (van Rooyen et al., NeurIPS 2015)
 - [Generalized Cross Entropy loss](https://arxiv.org/abs/1805.07836v4) (Zhang & Sabuncu, NeurIPS 2018)
 
-This repository reproduces all the experiments of the original paper, as part of our participation in the [ML Reproducibility Challenge 2020](https://paperswithcode.com/rc2020). 
-Our [reproducibility report can be found on OpenReview](https://openreview.net/forum?id=TM_SgwWJA23), and has been selected for publication in the [ReScience C](http://rescience.github.io/) journal. If you find any piece of our code or report useful, please cite:
+This repository reproduces all the experiments of the original paper, as part of our participation in the [ML Reproducibility Challenge 2020](https://paperswithcode.com/rc2020). Our report can be found on [OpenReview](https://openreview.net/forum?id=TM_SgwWJA23) and in the [ReScience C journal](http://rescience.github.io/bibliography/Mizrahi_2021.html). If you find any piece of our code or report useful, please cite:
 ```BibTeX
 @inproceedings{mizrahi2021re,
 title={[Re] Can gradient clipping mitigate label noise?},
