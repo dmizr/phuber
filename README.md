@@ -1,17 +1,29 @@
-# Can gradient clipping mitigate label noise?
+# [Re] Can gradient clipping mitigate label noise?
 
 [![Python 3.8](https://img.shields.io/badge/python-3.8-blue.svg)](https://www.python.org/downloads/release/python-380//)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 
-A [PyTorch](https://pytorch.org/) implementation of the ICLR 2020 paper "[Can gradient clipping mitigate label noise?](https://openreview.net/pdf?id=rklB76EKPr)" by Menon et al.
+### [ReScience](http://rescience.github.io/bibliography/Mizrahi_2021.html) | [OpenReview](https://openreview.net/forum?id=TM_SgwWJA23)
 
-This paper studies the robustness of gradient clipping to symmetric label noise, and proposes partially Huberised (PHuber) versions of standard losses, which perform well in the presence of label noise.
+
+This is a non-official [PyTorch](https://pytorch.org/) implementation of the ICLR 2020 paper "[Can gradient clipping mitigate label noise?](https://openreview.net/pdf?id=rklB76EKPr)" by Menon et al. This paper studies the robustness of gradient clipping to symmetric label noise, and proposes partially Huberised (PHuber) versions of standard losses, which perform well in the presence of label noise.
 
 For the experiments, the following losses are also implemented:
 - [Unhinged loss](https://arxiv.org/abs/1505.07634v1) (van Rooyen et al., NeurIPS 2015)
 - [Generalized Cross Entropy loss](https://arxiv.org/abs/1805.07836v4) (Zhang & Sabuncu, NeurIPS 2018)
+
+This repository reproduces all the experiments of the original paper, as part of our participation in the [ML Reproducibility Challenge 2020](https://paperswithcode.com/rc2020). Our report can be found on [OpenReview](https://openreview.net/forum?id=TM_SgwWJA23) and in the [ReScience C journal](http://rescience.github.io/bibliography/Mizrahi_2021.html). If you find any piece of our code or report useful, please cite:
+```BibTeX
+@inproceedings{mizrahi2021re,
+title={[Re] Can gradient clipping mitigate label noise?},
+author={David Mizrahi and Oğuz Kaan Yüksel and Aiday Marlen Kyzy},
+booktitle={ML Reproducibility Challenge 2020},
+year={2021},
+url={https://openreview.net/forum?id=TM_SgwWJA23}
+}
+```
 
 
 ## Table of Contents
@@ -139,9 +151,9 @@ To find out more about the configuration options for evaluation, use the `--help
 ## Pretrained models
 
 For each configuration, the models obtained during the first trial are available on Google Drive:
-- [Pretrained LeNet on MNIST](https://drive.google.com/drive/folders/11K77jz6Kx0RQZTq1yEKJsgMbugYutfdj?usp=sharing)
-- [Pretrained ResNet-50 on CIFAR-10](https://drive.google.com/drive/folders/131pQY5bf4BaN6y0sBqBK6-LScbYRQaG8?usp=sharing)
-- [Pretrained ResNet-50 on CIFAR-100](https://drive.google.com/drive/folders/1-0bPSBo6ayz2sxayVyIG7Gd0ib0ZQSKi?usp=sharing)
+- [Pretrained LeNet on MNIST](https://drive.google.com/drive/folders/1_sVDLPUqmIyRPMYD0tNTOR3V1PJATIJD?usp=sharing)
+- [Pretrained ResNet-50 on CIFAR-10](https://drive.google.com/drive/folders/1Lo06OJX-QDV01ePrecaXREgn8AWgaXgY?usp=sharing)
+- [Pretrained ResNet-50 on CIFAR-100](https://drive.google.com/drive/folders/1Aas0q2LuaYr1ljHJXKTT4tIiwP0OzD3i?usp=sharing)
 
 
 ## Synthetic experiments
