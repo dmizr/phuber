@@ -1,4 +1,3 @@
-# @package _group_
 _target_: phuber.loss.PHuberGeneralizedCrossEntropy
 q: 0.7
 tau: 10
