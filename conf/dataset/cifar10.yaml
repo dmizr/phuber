@@ -1,4 +1,3 @@
-# @package _group_
 name: cifar10
 root: data/
 download: true # download if not already downloaded

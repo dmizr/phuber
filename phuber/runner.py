@@ -136,7 +136,7 @@ def evaluate(cfg: DictConfig) -> None:
         evaluator = Evaluator(
             model=model,
             device=device,
-            loader=test_loader,
+            loader=val_loader,
             checkpoint_path=checkpoint_path,
         )
         evaluator.evaluate()

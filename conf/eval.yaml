@@ -2,5 +2,5 @@ defaults:
   - dataset: mnist
   - model: lenet
   - misc: eval_misc
-  - hydra/job_logging: custom
-  - hydra/output: custom
+  - override hydra/job_logging: custom
+  - override hydra/output: custom
