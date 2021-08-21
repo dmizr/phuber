@@ -14,16 +14,7 @@ For the experiments, the following losses are also implemented:
 - [Unhinged loss](https://arxiv.org/abs/1505.07634v1) (van Rooyen et al., NeurIPS 2015)
 - [Generalized Cross Entropy loss](https://arxiv.org/abs/1805.07836v4) (Zhang & Sabuncu, NeurIPS 2018)
 
-This repository reproduces all the experiments of the original paper, as part of our participation in the [ML Reproducibility Challenge 2020](https://paperswithcode.com/rc2020). Our report can be found on [OpenReview](https://openreview.net/forum?id=TM_SgwWJA23) and in the [ReScience C journal](http://rescience.github.io/bibliography/Mizrahi_2021.html). If you find any piece of our code or report useful, please cite:
-```BibTeX
-@inproceedings{mizrahi2021re,
-title={[Re] Can gradient clipping mitigate label noise?},
-author={David Mizrahi and Oğuz Kaan Yüksel and Aiday Marlen Kyzy},
-booktitle={ML Reproducibility Challenge 2020},
-year={2021},
-url={https://openreview.net/forum?id=TM_SgwWJA23}
-}
-```
+This repository reproduces all the experiments of the original paper, as part of our participation in the [ML Reproducibility Challenge 2020](https://paperswithcode.com/rc2020). Our report can be found on [OpenReview](https://openreview.net/forum?id=TM_SgwWJA23) and in the [ReScience C journal](http://rescience.github.io/bibliography/Mizrahi_2021.html).
 
 
 ## Table of Contents
@@ -35,6 +26,7 @@ url={https://openreview.net/forum?id=TM_SgwWJA23}
 - [Synthetic experiments](#synthetic-experiments)
 - [Project structure](#project-structure)
 - [References](#references)
+- [Citation](#citation)
 
 
 ## Dependencies
@@ -197,3 +189,15 @@ This directory contains all the Hydra config files for both types of experiments
 - Zhang & Sabuncu, ["Generalized Cross Entropy Loss for Training Deep Neural Networks with Noisy Labels"](https://arxiv.org/abs/1805.07836), NeurIPS 2018
 - LeCun et al., ["Gradient-based learning applied to document recognition"](http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf), IEEE 1998
 - He et al., ["Deep Residual Learning for Image Recognition"](https://arxiv.org/abs/1512.03385), CVPR 2016
+
+## Citation
+If you find any piece of our code or report useful, please cite:
+```BibTeX
+@inproceedings{mizrahi2021re,
+title={[Re] Can gradient clipping mitigate label noise?},
+author={David Mizrahi and O{\u{g}}uz Kaan Y{\"u}ksel and Aiday Marlen Kyzy},
+booktitle={ML Reproducibility Challenge 2020},
+year={2021},
+url={https://openreview.net/forum?id=TM_SgwWJA23}
+}
+```
