@@ -193,11 +193,20 @@ This directory contains all the Hydra config files for both types of experiments
 ## Citation
 If you find any piece of our code or report useful, please cite:
 ```BibTeX
-@inproceedings{mizrahi2021re,
-title={[Re] Can gradient clipping mitigate label noise?},
-author={David Mizrahi and Oğuz Kaan Yüksel and Aiday Marlen Kyzy},
-booktitle={ML Reproducibility Challenge 2020},
-year={2021},
-url={https://openreview.net/forum?id=TM_SgwWJA23}
+@article{Mizrahi:2021,
+  author = {Mizrahi, David and Yüksel, Oğuz Kaan and Kyzy, Aiday Marlen},
+  title = {{[Re] Can gradient clipping mitigate label noise?}},
+  journal = {ReScience C},
+  year = {2021},
+  month = may,
+  volume = {7},
+  number = {2},
+  pages = {{13}},
+  doi = {10.5281/zenodo.4834744},
+  url = {https://zenodo.org/record/4834744/files/article.pdf},
+  code_url = {https://github.com/dmizr/phuber},
+  review_url = {https://openreview.net/forum?id=TM_SgwWJA23},
+  type = {Replication},
+  domain = {ML Reproducibility Challenge 2020},
 }
 ```
