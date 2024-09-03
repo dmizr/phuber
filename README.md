@@ -143,9 +143,9 @@ To find out more about the configuration options for evaluation, use the `--help
 ## Pretrained models
 
 For each configuration, the models obtained during the first trial are available on Google Drive:
-- [Pretrained LeNet on MNIST](https://drive.google.com/drive/folders/1_sVDLPUqmIyRPMYD0tNTOR3V1PJATIJD?usp=sharing)
-- [Pretrained ResNet-50 on CIFAR-10](https://drive.google.com/drive/folders/1Lo06OJX-QDV01ePrecaXREgn8AWgaXgY?usp=sharing)
-- [Pretrained ResNet-50 on CIFAR-100](https://drive.google.com/drive/folders/1Aas0q2LuaYr1ljHJXKTT4tIiwP0OzD3i?usp=sharing)
+- [Pretrained LeNet on MNIST](https://drive.google.com/drive/folders/1FmIQ_ghut66NaQZlADbEk8GYqP7kGeCL?usp=sharing)
+- [Pretrained ResNet-50 on CIFAR-10](https://drive.google.com/drive/folders/1BRlggiJh9ezLMSqnVT1SHMtaaZiCautv?usp=sharing)
+- [Pretrained ResNet-50 on CIFAR-100](https://drive.google.com/drive/folders/1Q_flbou_X2-COO9Bx8Nc20DW2iiDub2a?usp=sharing)
 
 
 ## Synthetic experiments
